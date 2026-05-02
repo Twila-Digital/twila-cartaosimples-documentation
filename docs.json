@@ -37,10 +37,6 @@
               "pages/orders/simulate-installments",
               "pages/orders/start-cdc-sale"
             ]
-          },
-          {
-            "group": "Pagamento",
-            "pages": ["pages/payments/payment-link"]
           }
         ]
       },

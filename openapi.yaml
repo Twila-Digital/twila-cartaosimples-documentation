@@ -7,34 +7,6 @@ servers:
   - url: https://api.staging.cartaosimples.com.br/integration
     description: Servidor para o ambiente de staging
 paths:
-  /v1/payments/link/{orderId}:
-    get:
-      tags:
-        - Pagamento
-      summary: Obter link de pagamento.
-      description: Retorna o link de pagamento de um pedido para o parceiro.
-      parameters:
-        - name: orderId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Integration.Shared.Responses.Payment.GetPaymentLinkResponse"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-        "500":
-          description: Internal Server Error
   /v1/order/simulate-installments:
     post:
       tags:
@@ -80,7 +52,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Payment.Shared.Responses.OrderSessionLinkResponse"
+                $ref: "#/components/schemas/Payment.Shared.Responses.LinkPaymentResponse"
         "400":
           description: Bad Request
           content:
@@ -171,13 +143,6 @@ components:
           type: string
           format: uuid
       additionalProperties: false
-    Integration.Shared.Responses.Payment.GetPaymentLinkResponse:
-      type: object
-      properties:
-        link:
-          type: string
-          nullable: true
-      additionalProperties: false
     Microsoft.AspNetCore.Mvc.ProblemDetails:
       type: object
       properties:
@@ -213,10 +178,10 @@ components:
           type: number
           format: double
       additionalProperties: false
-    Payment.Shared.Responses.OrderSessionLinkResponse:
+    Payment.Shared.Responses.LinkPaymentResponse:
       type: object
       properties:
-        orderSessionLink:
+        checkoutLink:
           type: string
           nullable: true
       additionalProperties: false
@@ -297,8 +262,8 @@ components:
         - celular
         - cpf
         - dataDeNascimento
+        - documentoEstabelecimento
         - email
-        - estabelecimentoId
         - nome
         - valorSolicitado
       type: object
@@ -311,9 +276,9 @@ components:
           minLength: 1
           type: string
           example: "(11) 91234-5678"
-        estabelecimentoId:
+        documentoEstabelecimento:
+          minLength: 1
           type: string
-          format: uuid
         valorSolicitado:
           type: number
           format: double
