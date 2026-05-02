@@ -1,0 +1,340 @@
+openapi: 3.0.1
+info:
+  title: WebIntegration
+  description: Este documento descreve os endpoints disponíveis da API.
+  version: "1.0"
+servers:
+  - url: https://api.staging.cartaosimples.com.br/integration
+    description: Servidor para o ambiente de staging
+paths:
+  /v1/payments/link/{orderId}:
+    get:
+      tags:
+        - Pagamento
+      summary: Obter link de pagamento.
+      description: Retorna o link de pagamento de um pedido para o parceiro.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Integration.Shared.Responses.Payment.GetPaymentLinkResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/order/simulate-installments:
+    post:
+      tags:
+        - Pedido
+      summary: Simular parcelas do pedido.
+      description: Simula as opções de parcelamento disponíveis para um pedido.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.SimulateInstallmentsRequestContent"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order.Shared.Responses.SimulateInstallmentsResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/order/start-cdc-sale:
+    post:
+      tags:
+        - Pedido
+      summary: Iniciar venda CDC.
+      description: Inicia o processo de venda de um pedido CDC.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.StartCDCSaleContest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Payment.Shared.Responses.OrderSessionLinkResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/order/validate-cdc-customer-document-phone:
+    post:
+      tags:
+        - Pedido
+      summary: Validar documento e telefone do cliente CDC.
+      description: Valida o CPF e telefone do cliente para o fluxo de CDC (Crédito Direto ao Consumidor).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.ValidateCDCCustomerDocumentPhoneRequestContent"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Customer.Shared.Responses.IdentifierResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/authentication/accesstoken:
+    post:
+      tags:
+        - Autenticação
+      summary: Gerar token de acesso.
+      description: Gera um token de acesso (access_token) para o parceiro utilizando as credenciais do cliente (client_id e client_secret).
+      security: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebIntegration.Endpoints.Authentication.Requests.GenerateAccessTokenRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Common.Services.Cognito.AccessTokenResult"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+components:
+  schemas:
+    Common.Services.Cognito.AccessTokenResult:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          nullable: true
+        expiresIn:
+          type: integer
+          format: int32
+        expiresAt:
+          type: string
+          format: date-time
+          readOnly: true
+        tokenType:
+          type: string
+          nullable: true
+        scope:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Customer.Shared.Responses.IdentifierResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+      additionalProperties: false
+    Integration.Shared.Responses.Payment.GetPaymentLinkResponse:
+      type: object
+      properties:
+        link:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Microsoft.AspNetCore.Mvc.ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        title:
+          type: string
+          nullable: true
+        status:
+          type: integer
+          format: int32
+          nullable: true
+        detail:
+          type: string
+          nullable: true
+        instance:
+          type: string
+          nullable: true
+    Order.Shared.Responses.SimulateInstallmentsResponse:
+      type: object
+      properties:
+        installmentId:
+          type: string
+          format: uuid
+        installmentAmount:
+          type: number
+          format: double
+        term:
+          type: integer
+          format: int32
+        totalDebitAmount:
+          type: number
+          format: double
+      additionalProperties: false
+    Payment.Shared.Responses.OrderSessionLinkResponse:
+      type: object
+      properties:
+        orderSessionLink:
+          type: string
+          nullable: true
+      additionalProperties: false
+    WebIntegration.Endpoints.Authentication.Requests.GenerateAccessTokenRequest:
+      required:
+        - clientId
+        - clientSecret
+      type: object
+      properties:
+        clientId:
+          minLength: 1
+          type: string
+        clientSecret:
+          minLength: 1
+          type: string
+      additionalProperties: false
+    WebIntegration.Endpoints.Order.Requests.AddressRequestContent:
+      type: object
+      properties:
+        logradouro:
+          type: string
+          nullable: true
+          example: "Av. Paulista"
+        cidade:
+          type: string
+          nullable: true
+          example: "São Paulo"
+        estado:
+          type: string
+          nullable: true
+          example: "SP"
+          maxLength: 2
+        bairro:
+          type: string
+          nullable: true
+          example: "Bela Vista"
+        cep:
+          type: string
+          nullable: true
+          example: "01311000"
+        pais:
+          type: string
+          nullable: true
+          example: "Brasil"
+        numero:
+          type: string
+          nullable: true
+          example: "1578"
+        complemento:
+          type: string
+          nullable: true
+          example: "Bloco B, Apto 1203"
+      additionalProperties: false
+    WebIntegration.Endpoints.Order.Requests.SimulateInstallmentsRequestContent:
+      required:
+        - pedidoId
+        - valorSolicitado
+      type: object
+      properties:
+        pedidoId:
+          type: string
+          format: uuid
+        valorSolicitado:
+          type: number
+          format: double
+      additionalProperties: false
+    WebIntegration.Endpoints.Order.Requests.StartCDCSaleContest:
+      required:
+        - pedidoId
+      type: object
+      properties:
+        pedidoId:
+          type: string
+          format: uuid
+      additionalProperties: false
+    WebIntegration.Endpoints.Order.Requests.ValidateCDCCustomerDocumentPhoneRequestContent:
+      required:
+        - celular
+        - cpf
+        - dataDeNascimento
+        - email
+        - estabelecimentoId
+        - nome
+        - valorSolicitado
+      type: object
+      properties:
+        cpf:
+          minLength: 1
+          type: string
+          example: "12345678901"
+        celular:
+          minLength: 1
+          type: string
+          example: "(11) 91234-5678"
+        estabelecimentoId:
+          type: string
+          format: uuid
+        valorSolicitado:
+          type: number
+          format: double
+        nome:
+          minLength: 1
+          type: string
+        email:
+          minLength: 1
+          type: string
+        dataDeNascimento:
+          type: string
+          format: date-time
+          example: "2023-11-07T05:31:56Z"
+        endereco:
+          $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.AddressRequestContent"
+      additionalProperties: false
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Cabeçalho de autenticação Bearer no formato `Bearer <token>` onde `<token>` é seu TOKEN de autenticação
+security:
+  - bearerAuth: []
