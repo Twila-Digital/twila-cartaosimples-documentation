@@ -85,6 +85,7 @@ paths:
       summary: Importar nota fiscal.
       description: Importa a nota fiscal de um pedido CDC a partir de um arquivo em base64.
       requestBody:
+        required: true
         content:
           application/json:
             schema:
