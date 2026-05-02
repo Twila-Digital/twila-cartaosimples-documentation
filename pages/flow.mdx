@@ -23,14 +23,6 @@ Os endpoints devem ser chamados na seguinte ordem para completar uma venda CDC c
     </Card>
   </Step>
 
-  <Step title="Simular parcelas do pedido" icon="calculator">
-    Com o `id` do cliente obtido no passo anterior, simule as opções de parcelamento disponíveis para o valor solicitado.
-
-    <Card title="POST Simular parcelas do pedido" icon="list" href="/pages/orders/simulate-installments">
-      Pedido
-    </Card>
-  </Step>
-
   <Step title="Iniciar venda CDC" icon="cart-shopping">
     Inicie a venda com as condições escolhidas. A resposta retorna um **link de checkout** que deve ser acessado pelo cliente para concluir a compra.
 

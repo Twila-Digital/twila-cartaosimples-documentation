@@ -12,6 +12,12 @@
   },
   "openapi": ["/openapi.yaml"],
   "favicon": "/favicon.svg",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/pages/introduction"
+    }
+  ],
   "navigation": {
     "tabs": [
       {
@@ -44,14 +50,10 @@
             "group": "Pedido",
             "pages": [
               "pages/orders/validate-cdc-customer",
-              "pages/orders/simulate-installments",
               "pages/orders/start-cdc-sale"
             ]
           }
         ]
-      },
-      {
-        "tab": "Padrão"
       }
     ]
   },

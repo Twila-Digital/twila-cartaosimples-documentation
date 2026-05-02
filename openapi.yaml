@@ -7,35 +7,6 @@ servers:
   - url: https://api.staging.cartaosimples.com.br/integration
     description: Servidor para o ambiente de staging
 paths:
-  /v1/order/simulate-installments:
-    post:
-      operationId: simulateInstallments
-      tags:
-        - Pedido
-      summary: Simular parcelas do pedido.
-      description: Simula as opções de parcelamento disponíveis para um pedido.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.SimulateInstallmentsRequestContent"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Order.Shared.Responses.SimulateInstallmentsResponse"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-        "500":
-          description: Internal Server Error
   /v1/order/start-cdc-sale:
     post:
       operationId: startCdcSale
@@ -91,7 +62,6 @@ paths:
                 cidade: "São Paulo"
                 estado: "SP"
                 cep: "01311000"
-                pais: "Brasil"
       responses:
         "200":
           description: OK
@@ -160,7 +130,7 @@ components:
     Customer.Shared.Responses.IdentifierResponse:
       type: object
       properties:
-        id:
+        pedidoId:
           type: string
           format: uuid
       additionalProperties: false
@@ -183,26 +153,10 @@ components:
         instance:
           type: string
           nullable: true
-    Order.Shared.Responses.SimulateInstallmentsResponse:
-      type: object
-      properties:
-        installmentId:
-          type: string
-          format: uuid
-        installmentAmount:
-          type: number
-          format: double
-        term:
-          type: integer
-          format: int32
-        totalDebitAmount:
-          type: number
-          format: double
-      additionalProperties: false
     Payment.Shared.Responses.LinkPaymentResponse:
       type: object
       properties:
-        checkoutLink:
+        linkPagamento:
           type: string
           nullable: true
       additionalProperties: false
@@ -243,10 +197,6 @@ components:
           type: string
           nullable: true
           example: "01311000"
-        pais:
-          type: string
-          nullable: true
-          example: "Brasil"
         numero:
           type: string
           nullable: true
@@ -255,19 +205,6 @@ components:
           type: string
           nullable: true
           example: "Bloco B, Apto 1203"
-      additionalProperties: false
-    WebIntegration.Endpoints.Order.Requests.SimulateInstallmentsRequestContent:
-      required:
-        - pedidoId
-        - valorSolicitado
-      type: object
-      properties:
-        pedidoId:
-          type: string
-          format: uuid
-        valorSolicitado:
-          type: number
-          format: double
       additionalProperties: false
     WebIntegration.Endpoints.Order.Requests.StartCDCSaleContest:
       required:
