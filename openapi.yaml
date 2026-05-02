@@ -77,6 +77,33 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
+  /v1/order/import-invoice:
+    post:
+      operationId: importOrderInvoice
+      tags:
+        - Pedido
+      summary: Importar nota fiscal.
+      description: Importa a nota fiscal de um pedido CDC a partir de um arquivo em base64.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.ImportOrderInvoiceFromBase64Content"
+            example:
+              pedidoId: "00000000-0000-0000-0000-000000000000"
+              arquivoBase64: "JVBERi0xLjQKJeLjz9MKMSAwIG9iago..."
+              nomeArquivo: "nota-fiscal.pdf"
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
   /v1/authentication/accesstoken:
     post:
       operationId: generateAccessToken
@@ -205,6 +232,29 @@ components:
           type: string
           nullable: true
           example: "Bloco B, Apto 1203"
+      additionalProperties: false
+    WebIntegration.Endpoints.Order.Requests.ImportOrderInvoiceFromBase64Content:
+      required:
+        - pedidoId
+        - arquivoBase64
+        - nomeArquivo
+      type: object
+      properties:
+        pedidoId:
+          type: string
+          format: uuid
+          description: Identificador do pedido.
+          example: "00000000-0000-0000-0000-000000000000"
+        arquivoBase64:
+          minLength: 1
+          type: string
+          description: Conteúdo do arquivo da nota fiscal codificado em base64.
+          example: "JVBERi0xLjQKJeLjz9MKMSAwIG9iago..."
+        nomeArquivo:
+          minLength: 1
+          type: string
+          description: "Nome do arquivo com extensão (ex: nota-fiscal.pdf)."
+          example: "nota-fiscal.pdf"
       additionalProperties: false
     WebIntegration.Endpoints.Order.Requests.StartCDCSaleContest:
       required:

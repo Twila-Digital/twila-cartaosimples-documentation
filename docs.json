@@ -50,7 +50,8 @@
             "group": "Pedido",
             "pages": [
               "pages/orders/validate-cdc-customer",
-              "pages/orders/start-cdc-sale"
+              "pages/orders/start-cdc-sale",
+              "pages/orders/import-invoice"
             ]
           }
         ]
