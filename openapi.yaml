@@ -9,6 +9,7 @@ servers:
 paths:
   /v1/order/simulate-installments:
     post:
+      operationId: simulateInstallments
       tags:
         - Pedido
       summary: Simular parcelas do pedido.
@@ -37,6 +38,7 @@ paths:
           description: Internal Server Error
   /v1/order/start-cdc-sale:
     post:
+      operationId: startCdcSale
       tags:
         - Pedido
       summary: Iniciar venda CDC.
@@ -61,17 +63,35 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
-  /v1/order/validate-cdc-customer-document-phone:
+  /v1/order:
     post:
+      operationId: createOrder
       tags:
         - Pedido
-      summary: Validar documento e telefone do cliente CDC.
-      description: Valida o CPF e telefone do cliente para o fluxo de CDC (Crédito Direto ao Consumidor).
+      summary: Criar pedido.
+      description: Cria um novo pedido CDC com os dados do cliente e as informações da venda.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.ValidateCDCCustomerDocumentPhoneRequestContent"
+              $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.CreateOrderRequestContent"
+            example:
+              cpf: "12345678901"
+              celular: "+55 (11) 91234-5678"
+              documentoEstabelecimento: "12345678000195"
+              valorSolicitado: 1500.00
+              nome: "João da Silva"
+              email: "joao.silva@email.com"
+              dataDeNascimento: "1990-05-15T00:00:00Z"
+              endereco:
+                logradouro: "Av. Paulista"
+                numero: "1578"
+                complemento: "Bloco B, Apto 1203"
+                bairro: "Bela Vista"
+                cidade: "São Paulo"
+                estado: "SP"
+                cep: "01311000"
+                pais: "Brasil"
       responses:
         "200":
           description: OK
@@ -89,6 +109,7 @@ paths:
           description: Internal Server Error
   /v1/authentication/accesstoken:
     post:
+      operationId: generateAccessToken
       tags:
         - Autenticação
       summary: Gerar token de acesso.
@@ -257,7 +278,7 @@ components:
           type: string
           format: uuid
       additionalProperties: false
-    WebIntegration.Endpoints.Order.Requests.ValidateCDCCustomerDocumentPhoneRequestContent:
+    WebIntegration.Endpoints.Order.Requests.CreateOrderRequestContent:
       required:
         - celular
         - cpf
@@ -275,19 +296,23 @@ components:
         celular:
           minLength: 1
           type: string
-          example: "(11) 91234-5678"
+          example: "+55 (11) 91234-5678"
         documentoEstabelecimento:
           minLength: 1
           type: string
+          example: "12345678000195"
         valorSolicitado:
           type: number
           format: double
+          example: 1500.00
         nome:
           minLength: 1
           type: string
+          example: "João da Silva"
         email:
           minLength: 1
           type: string
+          example: "joao.silva@email.com"
         dataDeNascimento:
           type: string
           format: date-time

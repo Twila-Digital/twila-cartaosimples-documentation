@@ -1,0 +1,48 @@
+---
+title: Cartões de Teste
+icon: 'credit-card'
+description: "Números de cartão para simular transações em ambiente de testes."
+---
+
+## Transação aprovada
+
+Para testar uma transação aprovada, utilize um dos números abaixo, qualquer código de segurança com 3 dígitos e qualquer data de validade igual ou até quinze anos à frente.
+
+<Tabs>
+  <Tab title="Mastercard">
+    | Número do Cartão |
+    | ---------------- |
+    | 5555 5555 5555 5557 |
+  </Tab>
+  <Tab title="Visa">
+    | Número do Cartão |
+    | ---------------- |
+    | 4444 4444 4444 4448 |
+  </Tab>
+</Tabs>
+
+---
+
+## Transação rejeitada
+
+Para simular uma transação rejeitada, utilize qualquer outra numeração válida de acordo com o algoritmo de Luhn. Exemplos:
+
+<Tabs>
+  <Tab title="Mastercard">
+    | Número do Cartão | Mensagem | Código |
+    | ---------------- | -------- | ------ |
+    | 5573 4311 1250 9388 | Transação não permitida | 57 |
+    | 5258 1637 8173 2668 | Cartão não foi desbloqueado pelo portador | 78 |
+    | 5145 4078 3665 3354 | Código de segurança inválido | N7 |
+    | 5494 0686 7287 2917 | Erro de comunicação com o gateway | — |
+  </Tab>
+  <Tab title="Visa">
+    | Número do Cartão | Mensagem | Código |
+    | ---------------- | -------- | ------ |
+    | 4716 0467 0464 9375 | Transação referida pelo emissor | 01 |
+    | 4534 7344 7624 9504 | Cartão com restrição | 04 |
+    | 4556 4481 3908 2581 | Transação não autorizada | 05 |
+    | 4532 1350 0275 9267 | Saldo insuficiente | 51 |
+    | 4556 9150 0751 2766 | Cartão vencido | 54 |
+  </Tab>
+</Tabs>

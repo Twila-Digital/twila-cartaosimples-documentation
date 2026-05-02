@@ -1,0 +1,45 @@
+---
+title: Fluxo de integração
+icon: 'arrow-right-arrow-left'
+description: "Ordem de chamadas para realizar uma venda CDC do início ao fim."
+---
+
+Os endpoints devem ser chamados na seguinte ordem para completar uma venda CDC com sucesso.
+
+<Steps>
+  <Step title="Gerar token de acesso" icon="key">
+    Autentique-se na API para obter o Bearer token que será utilizado em todas as chamadas seguintes.
+
+    <Card title="POST Gerar token de acesso" icon="lock" href="/pages/authentication/access-token">
+      Autenticação
+    </Card>
+  </Step>
+
+  <Step title="Criar pedido" icon="user-check">
+    Crie o pedido com os dados do cliente. Retorna o `id` do pedido que será utilizado nos próximos passos.
+
+    <Card title="POST Criar pedido" icon="id-card" href="/pages/orders/validate-cdc-customer">
+      Pedido
+    </Card>
+  </Step>
+
+  <Step title="Simular parcelas do pedido" icon="calculator">
+    Com o `id` do cliente obtido no passo anterior, simule as opções de parcelamento disponíveis para o valor solicitado.
+
+    <Card title="POST Simular parcelas do pedido" icon="list" href="/pages/orders/simulate-installments">
+      Pedido
+    </Card>
+  </Step>
+
+  <Step title="Iniciar venda CDC" icon="cart-shopping">
+    Inicie a venda com as condições escolhidas. A resposta retorna um **link de checkout** que deve ser acessado pelo cliente para concluir a compra.
+
+    <Card title="POST Iniciar venda CDC" icon="play" href="/pages/orders/start-cdc-sale">
+      Pedido
+    </Card>
+
+    <Info>
+      Após executar este endpoint, redirecione o cliente para o link retornado na resposta. É por meio desse link que ele finalizará a compra, preenchendo os dados do cartão e confirmando o pagamento.
+    </Info>
+  </Step>
+</Steps>

@@ -23,12 +23,22 @@
               "pages/introduction",
               "pages/development",
               "pages/authentication",
-              "pages/webhooks"
+              "pages/webhooks",
+              "pages/test-cards"
             ]
           },
           {
             "group": "Autenticação",
             "pages": ["pages/authentication/access-token"]
+          }
+        ]
+      },
+      {
+        "tab": "CDC",
+        "groups": [
+          {
+            "group": "Fluxo",
+            "pages": ["pages/flow"]
           },
           {
             "group": "Pedido",
@@ -39,9 +49,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "CDC"
       },
       {
         "tab": "Padrão"
