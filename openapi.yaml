@@ -138,20 +138,20 @@ components:
     Common.Services.Cognito.AccessTokenResult:
       type: object
       properties:
-        accessToken:
+        token_de_acesso:
           type: string
           nullable: true
-        expiresIn:
+        expira_em_segundos:
           type: integer
           format: int32
-        expiresAt:
+        expira_em:
           type: string
           format: date-time
           readOnly: true
-        tokenType:
+        tipo_de_token:
           type: string
           nullable: true
-        scope:
+        escopo:
           type: string
           nullable: true
       additionalProperties: false
