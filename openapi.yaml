@@ -77,7 +77,7 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
-  /v1/order/import-invoice:
+  /v1/order/invoice:
     post:
       operationId: importOrderInvoice
       tags:
