@@ -133,6 +133,344 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
+  /v1/order/{orderId}:
+    get:
+      operationId: getOrder
+      tags:
+        - Pedido
+      summary: Obter pedido.
+      description: Retorna os detalhes de um pedido pelo identificador.
+      parameters:
+        - name: orderId
+          in: path
+          description: Identificador único do pedido.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderIntegrationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/order/list:
+    get:
+      operationId: listOrders
+      tags:
+        - Pedido
+      summary: Listar pedidos.
+      description: Retorna todos os pedidos do parceiro com filtros opcionais.
+      parameters:
+        - name: status
+          in: query
+          description: Filtrar por status do pedido. Campo opcional.
+          schema:
+            type: string
+        - name: customerId
+          in: query
+          description: Identificador do cliente. Campo opcional.
+          schema:
+            type: string
+            format: uuid
+        - name: documentoCliente
+          in: query
+          description: CPF do cliente (somente números). Campo opcional.
+          schema:
+            type: string
+            example: "12345678901"
+          example: "12345678901"
+        - name: dataInicio
+          in: query
+          description: Data de início do filtro no formato ISO-8601. Campo opcional.
+          schema:
+            type: string
+            format: date-time
+            example: "2025-01-01T00:00:00-03:00"
+          example: "2025-01-01T00:00:00-03:00"
+        - name: dataFim
+          in: query
+          description: Data de fim do filtro no formato ISO-8601. Campo opcional.
+          schema:
+            type: string
+            format: date-time
+            example: "2025-12-31T23:59:59-03:00"
+          example: "2025-12-31T23:59:59-03:00"
+        - name: numero
+          in: query
+          description: Número do pedido. Campo opcional.
+          schema:
+            type: integer
+            format: int64
+            example: 1001
+          example: 1001
+        - name: estabelecimentoId
+          in: query
+          description: Identificador do estabelecimento. Campo opcional.
+          schema:
+            type: string
+            format: uuid
+        - name: descricao
+          in: query
+          description: Filtrar por descrição do pedido. Campo opcional.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderIntegrationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/order/paged:
+    get:
+      operationId: pagedOrders
+      tags:
+        - Pedido
+      summary: Listar pedidos paginados.
+      description: Retorna uma lista paginada de pedidos do parceiro com filtros opcionais.
+      parameters:
+        - name: status
+          in: query
+          description: Filtrar por status do pedido. Campo opcional.
+          schema:
+            type: string
+        - name: customerId
+          in: query
+          description: Identificador do cliente. Campo opcional.
+          schema:
+            type: string
+            format: uuid
+        - name: documentoCliente
+          in: query
+          description: CPF do cliente (somente números). Campo opcional.
+          schema:
+            type: string
+            example: "12345678901"
+          example: "12345678901"
+        - name: dataInicio
+          in: query
+          description: Data de início do filtro no formato ISO-8601. Campo opcional.
+          schema:
+            type: string
+            format: date-time
+            example: "2025-01-01T00:00:00-03:00"
+          example: "2025-01-01T00:00:00-03:00"
+        - name: dataFim
+          in: query
+          description: Data de fim do filtro no formato ISO-8601. Campo opcional.
+          schema:
+            type: string
+            format: date-time
+            example: "2025-12-31T23:59:59-03:00"
+          example: "2025-12-31T23:59:59-03:00"
+        - name: numero
+          in: query
+          description: Número do pedido. Campo opcional.
+          schema:
+            type: integer
+            format: int64
+            example: 1001
+          example: 1001
+        - name: estabelecimentoId
+          in: query
+          description: Identificador do estabelecimento. Campo opcional.
+          schema:
+            type: string
+            format: uuid
+        - name: descricao
+          in: query
+          description: Filtrar por descrição do pedido. Campo opcional.
+          schema:
+            type: string
+        - name: pagina
+          in: query
+          description: "Número da página. Padrão: 1."
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          example: 1
+        - name: tamanhoPagina
+          in: query
+          description: "Quantidade de itens por página. Padrão: 10."
+          schema:
+            type: integer
+            format: int32
+            example: 10
+          example: 10
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Core.Domain.Primitives.IPagedResult_OrderIntegrationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/customer/{customerId}:
+    get:
+      operationId: getCustomer
+      tags:
+        - Cliente
+      summary: Obter cliente.
+      description: Retorna os detalhes de um cliente pelo identificador.
+      parameters:
+        - name: customerId
+          in: path
+          description: Identificador único do cliente.
+          required: true
+          schema:
+            type: string
+            format: uuid
+            example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Integration.Shared.Responses.Customer.CustomerIntegrationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/customer/list:
+    get:
+      operationId: listCustomers
+      tags:
+        - Cliente
+      summary: Listar clientes.
+      description: Retorna todos os clientes vinculados ao parceiro com filtros opcionais.
+      parameters:
+        - name: nome
+          in: query
+          description: Filtrar por nome do cliente. Campo opcional.
+          schema:
+            type: string
+            example: "Maria Souza"
+          example: "Maria Souza"
+        - name: documento
+          in: query
+          description: Filtrar por CPF do cliente (somente números). Campo opcional.
+          schema:
+            type: string
+            example: "12345678901"
+          example: "12345678901"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Integration.Shared.Responses.Customer.CustomerIntegrationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
+  /v1/customer/paged:
+    get:
+      operationId: pagedCustomers
+      tags:
+        - Cliente
+      summary: Listar clientes paginados.
+      description: Retorna uma lista paginada de clientes vinculados ao parceiro com filtros opcionais.
+      parameters:
+        - name: nome
+          in: query
+          description: Filtrar por nome do cliente. Campo opcional.
+          schema:
+            type: string
+            example: "Maria Souza"
+          example: "Maria Souza"
+        - name: documento
+          in: query
+          description: Filtrar por CPF do cliente (somente números). Campo opcional.
+          schema:
+            type: string
+            example: "12345678901"
+          example: "12345678901"
+        - name: pagina
+          in: query
+          description: "Número da página. Padrão: 1."
+          schema:
+            type: integer
+            format: int32
+            example: 1
+          example: 1
+        - name: tamanhoPagina
+          in: query
+          description: "Quantidade de itens por página. Padrão: 10."
+          schema:
+            type: integer
+            format: int32
+            example: 10
+          example: 10
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Core.Domain.Primitives.IPagedResult_CustomerIntegrationResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "500":
+          description: Internal Server Error
 components:
   schemas:
     Common.Services.Cognito.AccessTokenResult:
@@ -155,12 +493,162 @@ components:
           type: string
           nullable: true
       additionalProperties: false
+    Core.Domain.Primitives.IPagedResult_CustomerIntegrationResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Integration.Shared.Responses.Customer.CustomerIntegrationResponse"
+          nullable: true
+          readOnly: true
+        page:
+          $ref: "#/components/schemas/Core.Domain.Primitives.Page"
+      additionalProperties: false
+    Core.Domain.Primitives.IPagedResult_OrderIntegrationResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderIntegrationResponse"
+          nullable: true
+          readOnly: true
+        page:
+          $ref: "#/components/schemas/Core.Domain.Primitives.Page"
+      additionalProperties: false
+    Core.Domain.Primitives.Page:
+      type: object
+      properties:
+        hasNext:
+          type: boolean
+        hasPrevious:
+          type: boolean
+        number:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+        maxPageNumber:
+          type: integer
+          format: int32
+      additionalProperties: false
     Customer.Shared.Responses.IdentifierResponse:
       type: object
       properties:
         pedidoId:
           type: string
           format: uuid
+      additionalProperties: false
+    Integration.Shared.Responses.Customer.Address:
+      type: object
+      properties:
+        rua:
+          type: string
+          nullable: true
+        cidade:
+          type: string
+          nullable: true
+        estado:
+          type: string
+          nullable: true
+        bairro:
+          type: string
+          nullable: true
+        cep:
+          type: string
+          nullable: true
+        pais:
+          type: string
+          nullable: true
+        numero:
+          type: string
+          nullable: true
+        complemento:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Integration.Shared.Responses.Customer.CustomerIntegrationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        nome:
+          type: string
+          nullable: true
+        documento:
+          type: string
+          nullable: true
+        endereco:
+          $ref: "#/components/schemas/Integration.Shared.Responses.Customer.Address"
+        dataDeNascimento:
+          type: string
+          format: date-time
+        email:
+          type: string
+          nullable: true
+        celular:
+          type: string
+          nullable: true
+      additionalProperties: false
+    Integration.Shared.Responses.Order.OrderIntegrationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        numero:
+          type: integer
+          format: int64
+        status:
+          type: string
+          nullable: true
+        total:
+          type: number
+          format: double
+          nullable: true
+        nomeCliente:
+          type: string
+          nullable: true
+        documentoCliente:
+          type: string
+          nullable: true
+        prazo:
+          type: integer
+          format: int32
+          nullable: true
+        razaoSocialEstabelecimento:
+          type: string
+          nullable: true
+        documentoEstabelecimento:
+          type: string
+          nullable: true
+        descricao:
+          type: string
+          nullable: true
+        valorAprovado:
+          type: number
+          format: double
+          nullable: true
+        desembolsado:
+          type: boolean
+          nullable: true
+        criadoEm:
+          type: string
+          format: date-time
+        desembolsadoEm:
+          type: string
+          format: date-time
+          nullable: true
+        valorSolicitado:
+          type: number
+          format: double
+          nullable: true
       additionalProperties: false
     Microsoft.AspNetCore.Mvc.ProblemDetails:
       type: object
