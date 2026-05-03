@@ -210,12 +210,26 @@ paths:
           description: Filtrar por status do pedido. Campo opcional.
           schema:
             type: string
-        - name: clienteId
-          in: query
-          description: Identificador do cliente. Campo opcional.
-          schema:
-            type: string
-            format: uuid
+            enum:
+              - Undefined
+              - Approved
+              - Analysing
+              - UnavailableBalance
+              - AnalysisExpired
+              - PendingPayment
+              - BiometryRefused
+              - BiometryApproved
+              - PaymentRefused
+              - Purchased
+              - NotAuthorized
+              - PendingAuthorization
+              - WaitingRegistration
+              - SaleNotStarted
+              - Billing
+              - Canceled
+              - Done
+              - Frozen
+              - PendingPaymentConfirmation
         - name: documentoCliente
           in: query
           description: CPF do cliente (somente números). Campo opcional.
@@ -304,12 +318,26 @@ paths:
           description: Filtrar por status do pedido. Campo opcional.
           schema:
             type: string
-        - name: clienteId
-          in: query
-          description: Identificador do cliente. Campo opcional.
-          schema:
-            type: string
-            format: uuid
+            enum:
+              - Undefined
+              - Approved
+              - Analysing
+              - UnavailableBalance
+              - AnalysisExpired
+              - PendingPayment
+              - BiometryRefused
+              - BiometryApproved
+              - PaymentRefused
+              - Purchased
+              - NotAuthorized
+              - PendingAuthorization
+              - WaitingRegistration
+              - SaleNotStarted
+              - Billing
+              - Canceled
+              - Done
+              - Frozen
+              - PendingPaymentConfirmation
         - name: documentoCliente
           in: query
           description: CPF do cliente (somente números). Campo opcional.
@@ -722,6 +750,26 @@ components:
           format: int64
         status:
           type: string
+          enum:
+            - Undefined
+            - Approved
+            - Analysing
+            - UnavailableBalance
+            - AnalysisExpired
+            - PendingPayment
+            - BiometryRefused
+            - BiometryApproved
+            - PaymentRefused
+            - Purchased
+            - NotAuthorized
+            - PendingAuthorization
+            - WaitingRegistration
+            - SaleNotStarted
+            - Billing
+            - Canceled
+            - Done
+            - Frozen
+            - PendingPaymentConfirmation
         total:
           type: number
           format: double
@@ -780,6 +828,12 @@ components:
         instancia:
           type: string
           nullable: true
+      example:
+        tipo: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+        titulo: "Requisição inválida."
+        status: 400
+        detalhe: "O campo 'cpf' é obrigatório."
+        instancia: "/v1/order"
     Payment.Shared.Responses.LinkPaymentResponse:
       type: object
       properties:
