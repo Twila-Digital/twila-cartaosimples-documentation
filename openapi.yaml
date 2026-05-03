@@ -133,7 +133,7 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
-  /v1/order/{orderId}:
+  /v1/order/{pedidoId}:
     get:
       operationId: getOrder
       tags:
@@ -141,7 +141,7 @@ paths:
       summary: Obter pedido.
       description: Retorna os detalhes de um pedido pelo identificador.
       parameters:
-        - name: orderId
+        - name: pedidoId
           in: path
           description: Identificador único do pedido.
           required: true
@@ -184,7 +184,7 @@ paths:
           description: Filtrar por status do pedido. Campo opcional.
           schema:
             type: string
-        - name: customerId
+        - name: clienteId
           in: query
           description: Identificador do cliente. Campo opcional.
           schema:
@@ -262,7 +262,7 @@ paths:
           description: Filtrar por status do pedido. Campo opcional.
           schema:
             type: string
-        - name: customerId
+        - name: clienteId
           in: query
           description: Identificador do cliente. Campo opcional.
           schema:
@@ -341,7 +341,7 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
-  /v1/customer/{customerId}:
+  /v1/customer/{clienteId}:
     get:
       operationId: getCustomer
       tags:
@@ -349,7 +349,7 @@ paths:
       summary: Obter cliente.
       description: Retorna os detalhes de um cliente pelo identificador.
       parameters:
-        - name: customerId
+        - name: clienteId
           in: path
           description: Identificador único do cliente.
           required: true
@@ -478,7 +478,6 @@ components:
       properties:
         token_de_acesso:
           type: string
-          nullable: true
         expira_em_segundos:
           type: integer
           format: int32
@@ -488,10 +487,8 @@ components:
           readOnly: true
         tipo_de_token:
           type: string
-          nullable: true
         escopo:
           type: string
-          nullable: true
       additionalProperties: false
     Core.Domain.Primitives.IPagedResult_CustomerIntegrationResponse:
       type: object
@@ -500,7 +497,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Integration.Shared.Responses.Customer.CustomerIntegrationResponse"
-          nullable: true
           readOnly: true
         page:
           $ref: "#/components/schemas/Core.Domain.Primitives.Page"
@@ -512,7 +508,6 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderIntegrationResponse"
-          nullable: true
           readOnly: true
         page:
           $ref: "#/components/schemas/Core.Domain.Primitives.Page"
@@ -520,20 +515,20 @@ components:
     Core.Domain.Primitives.Page:
       type: object
       properties:
-        hasNext:
+        temProxima:
           type: boolean
-        hasPrevious:
+        temAnterior:
           type: boolean
-        number:
+        numero:
           type: integer
           format: int32
-        size:
+        tamanho:
           type: integer
           format: int32
         total:
           type: integer
           format: int32
-        maxPageNumber:
+        numeroPaginaMaximo:
           type: integer
           format: int32
       additionalProperties: false
@@ -580,10 +575,8 @@ components:
           format: uuid
         nome:
           type: string
-          nullable: true
         documento:
           type: string
-          nullable: true
         endereco:
           $ref: "#/components/schemas/Integration.Shared.Responses.Customer.Address"
         dataDeNascimento:
@@ -607,7 +600,6 @@ components:
           format: int64
         status:
           type: string
-          nullable: true
         total:
           type: number
           format: double
@@ -617,17 +609,14 @@ components:
           nullable: true
         documentoCliente:
           type: string
-          nullable: true
         prazo:
           type: integer
           format: int32
           nullable: true
         razaoSocialEstabelecimento:
           type: string
-          nullable: true
         documentoEstabelecimento:
           type: string
-          nullable: true
         descricao:
           type: string
           nullable: true
@@ -653,20 +642,20 @@ components:
     Microsoft.AspNetCore.Mvc.ProblemDetails:
       type: object
       properties:
-        type:
+        tipo:
           type: string
           nullable: true
-        title:
+        titulo:
           type: string
           nullable: true
         status:
           type: integer
           format: int32
           nullable: true
-        detail:
+        detalhe:
           type: string
           nullable: true
-        instance:
+        instancia:
           type: string
           nullable: true
     Payment.Shared.Responses.LinkPaymentResponse:
