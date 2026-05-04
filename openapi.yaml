@@ -170,7 +170,9 @@ paths:
               example:
                 id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
                 numero: 1001
-                status: "Approved"
+                status:
+                  valor: 2
+                  descricao: "Aprovado"
                 total: 1500.00
                 nomeCliente: "João da Silva"
                 documentoCliente: "12345678901"
@@ -207,15 +209,32 @@ paths:
       parameters:
         - name: status
           in: query
-          description: Filtrar por status do pedido. Campo opcional.
+          description: |
+            Filtrar por status do pedido. Campo opcional.
+
+            Valores possíveis:
+            - 0 - Indefinido
+            - 1 - Em análise
+            - 2 - Aprovado
+            - 3 - Saldo indisponível
+            - 4 - Análise expirada
+            - 5 - Pagamento pendente
+            - 6 - Biometria recusada
+            - 7 - Biometria aprovada
+            - 8 - Pagamento recusado
+            - 9 - Comprado
+            - 10 - Não autorizado
+            - 11 - Autorização pendente
+            - 12 - Aguardando cadastro
+            - 13 - Venda não iniciada
+            - 14 - Cancelado
+            - 15 - Faturamento
+            - 16 - Concluído
+            - 17 - Congelado
+            - 18 - Confirmação de pagamento pendente
           schema:
-            type: string
-        - name: clienteId
-          in: query
-          description: Identificador do cliente. Campo opcional.
-          schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: documentoCliente
           in: query
           description: CPF do cliente (somente números). Campo opcional.
@@ -247,12 +266,13 @@ paths:
             format: int64
             example: 1001
           example: 1001
-        - name: estabelecimentoId
+        - name: documentoLoja
           in: query
-          description: Identificador do estabelecimento. Campo opcional.
+          description: CNPJ do estabelecimento (somente números). Campo opcional.
           schema:
             type: string
-            format: uuid
+            example: "12345678000195"
+          example: "12345678000195"
         - name: descricao
           in: query
           description: Filtrar por descrição do pedido. Campo opcional.
@@ -270,7 +290,9 @@ paths:
               example:
                 - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
                   numero: 1001
-                  status: "Approved"
+                  status:
+                    valor: 2
+                    descricao: "Aprovado"
                   total: 1500.00
                   nomeCliente: "João da Silva"
                   documentoCliente: "12345678901"
@@ -301,15 +323,32 @@ paths:
       parameters:
         - name: status
           in: query
-          description: Filtrar por status do pedido. Campo opcional.
+          description: |
+            Filtrar por status do pedido. Campo opcional.
+
+            Valores possíveis:
+            - 0 - Indefinido
+            - 1 - Em análise
+            - 2 - Aprovado
+            - 3 - Saldo indisponível
+            - 4 - Análise expirada
+            - 5 - Pagamento pendente
+            - 6 - Biometria recusada
+            - 7 - Biometria aprovada
+            - 8 - Pagamento recusado
+            - 9 - Comprado
+            - 10 - Não autorizado
+            - 11 - Autorização pendente
+            - 12 - Aguardando cadastro
+            - 13 - Venda não iniciada
+            - 14 - Cancelado
+            - 15 - Faturamento
+            - 16 - Concluído
+            - 17 - Congelado
+            - 18 - Confirmação de pagamento pendente
           schema:
-            type: string
-        - name: clienteId
-          in: query
-          description: Identificador do cliente. Campo opcional.
-          schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: documentoCliente
           in: query
           description: CPF do cliente (somente números). Campo opcional.
@@ -341,12 +380,13 @@ paths:
             format: int64
             example: 1001
           example: 1001
-        - name: estabelecimentoId
+        - name: documentoLoja
           in: query
-          description: Identificador do estabelecimento. Campo opcional.
+          description: CNPJ do estabelecimento (somente números). Campo opcional.
           schema:
             type: string
-            format: uuid
+            example: "12345678000195"
+          example: "12345678000195"
         - name: descricao
           in: query
           description: Filtrar por descrição do pedido. Campo opcional.
@@ -379,7 +419,9 @@ paths:
                 items:
                   - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
                     numero: 1001
-                    status: "Approved"
+                    status:
+                      valor: 2
+                      descricao: "Aprovado"
                     total: 1500.00
                     nomeCliente: "João da Silva"
                     documentoCliente: "12345678901"
@@ -711,6 +753,17 @@ components:
           type: string
           nullable: true
       additionalProperties: false
+    Integration.Shared.Responses.Order.OrderStatus:
+      type: object
+      description: |
+        Status do pedido. Consulte a legenda completa em [Webhooks → Legenda do EnumStatus](/webhooks).
+      properties:
+        valor:
+          type: integer
+          format: int32
+        descricao:
+          type: string
+      additionalProperties: false
     Integration.Shared.Responses.Order.OrderIntegrationResponse:
       type: object
       properties:
@@ -721,7 +774,7 @@ components:
           type: integer
           format: int64
         status:
-          type: string
+          $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderStatus"
         total:
           type: number
           format: double
@@ -780,6 +833,12 @@ components:
         instancia:
           type: string
           nullable: true
+      example:
+        tipo: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
+        titulo: "Requisição inválida."
+        status: 400
+        detalhe: "O campo 'cpf' é obrigatório."
+        instancia: "/v1/order"
     Payment.Shared.Responses.LinkPaymentResponse:
       type: object
       properties:
