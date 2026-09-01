@@ -4,7 +4,7 @@ info:
   description: Este documento descreve os endpoints disponíveis da API.
   version: "1.0"
 servers:
-  - url: https://api.staging.cartaosimples.com.br/integration
+  - url: https://api.staging.parcelemais.com.br/integration
     description: Servidor para o ambiente de staging
 paths:
   /v1/order/start-cdc-sale:
@@ -27,7 +27,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Payment.Shared.Responses.LinkPaymentResponse"
               example:
-                linkPagamento: "https://pagamento.cartaosimples.com.br/checkout/3c90c3cc-0d44-4b50-8888-8dd25736052a"
+                linkPagamento: "https://pagamento.parcelemais.com.br/checkout/3c90c3cc-0d44-4b50-8888-8dd25736052a"
         "400":
           description: Bad Request
           content:
