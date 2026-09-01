@@ -20,7 +20,7 @@ icon: 'lock'
 <Card icon="light-emergency-on" horizontal>
   * Armazene suas credenciais em variáveis de ambiente ou gerenciadores de segredos
   * Nunca compartilhe seus tokens
-  * A CartãoSimples nunca solicitará suas credenciais
+  * A Parcele + nunca solicitará suas credenciais
 </Card>
 
 ## Como criar seu Bearer Token
@@ -28,7 +28,7 @@ icon: 'lock'
 Após solicitar suas credenciais ao nosso suporte, você pode começar a integrar com nossa API.
 
 ```bash
-curl -X POST https://api.staging.CartãoSimples.com.br/integration/v1/authentication/accesstoken \
+curl -X POST https://api.staging.cartaosimples.com.br/integration/v1/authentication/accesstoken \
   -H "Content-Type: application/json" \
   -d '{ "clientId": "clientId", "clientSecret": "clientSecret" }'
 ```
