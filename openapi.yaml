@@ -134,7 +134,7 @@ paths:
                 expira_em_segundos: 3600
                 expira_em: "2025-01-15T11:30:00-03:00"
                 tipo_de_token: "Bearer"
-                escopo: "credicarro.integration.access/full"
+                escopo: "parcelemais.integration.access/full"
         "400":
           description: Bad Request
           content:
