@@ -7,6 +7,132 @@ servers:
   - url: https://api.staging.parcelemais.com.br/integration
     description: Servidor para o ambiente de staging
 paths:
+  /v1/order/simulate-installments:
+    get:
+      operationId: listSimulateInstallments
+      tags:
+        - Pedido
+      summary: Simular parcelas.
+      description: Retorna as opções de parcelamento disponíveis para o valor informado. O parceiro e a rede de lojas são identificados automaticamente pelo token de acesso.
+      parameters:
+        - name: valorSolicitado
+          in: query
+          description: Valor solicitado para a simulação. Deve ser igual ou superior a R$ 250,00.
+          required: true
+          schema:
+            type: number
+            format: double
+            minimum: 250
+          example: 1500.00
+      responses:
+        "200":
+          description: Opções de parcelamento calculadas com sucesso.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Integration.Shared.Responses.Order.ListSimulateInstallmentsSimplifiedIntegrationResponse"
+              example:
+                - valorTotalDebito: 1632.48
+                  prazo: 12
+                  valorParcela: 136.04
+        "400":
+          description: Parâmetros inválidos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "404":
+          description: Parceiro, estabelecimento ou rede de lojas não encontrado.
+        "500":
+          description: Internal Server Error
+  /v1/order/simulate-values:
+    get:
+      operationId: getSimulationValues
+      tags:
+        - Pedido
+      summary: Simular repasse.
+      description: Calcula os valores da venda para o estabelecimento e para o cliente. O parceiro e a rede de lojas são identificados automaticamente pelo token de acesso.
+      parameters:
+        - name: valor
+          in: query
+          description: Valor de referência da simulação. O significado depende de `tipoValorCalculo`.
+          required: true
+          schema:
+            type: number
+            format: double
+          example: 1500.00
+        - name: prazo
+          in: query
+          description: Quantidade de parcelas da simulação.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+          example: 12
+        - name: modeloJuros
+          in: query
+          description: |
+            Define quem paga os juros:
+            - `1` — Cliente paga os juros. Os juros são acrescentados ao valor financiado pelo cliente.
+            - `2` — Estabelecimento assume os juros. O cliente não paga juros, e o custo é assumido pelo estabelecimento.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            enum: [1, 2]
+          example: 1
+        - name: tipoValorCalculo
+          in: query
+          description: |
+            Define o valor de referência do cálculo:
+            - `1` — A partir do valor da venda. `valor` representa o valor bruto da venda.
+            - `2` — A partir do valor líquido. `valor` representa o valor líquido que o estabelecimento deseja receber.
+          required: true
+          schema:
+            type: integer
+            format: int32
+            enum: [1, 2]
+          example: 1
+      responses:
+        "200":
+          description: Valores calculados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Integration.Shared.Responses.Order.SimulationValuesIntegrationResponse"
+              example:
+                valoresEstabelecimento:
+                  antecipacao:
+                    taxa: 2.5
+                    valor: 243.75
+                  mdr:
+                    taxa: 1.99
+                    valor: 32.48
+                  valorVenda: 1500.00
+                  valorLiquido: 1223.77
+                valoresCliente:
+                  taxaJuros:
+                    taxa: 2.0
+                    valor: 360.00
+                  iof:
+                    taxa: 3.38
+                    valor: 50.70
+                  tac: 100.00
+                  valorVenda: 1500.00
+                  valorParcela: 167.56
+        "400":
+          description: Parâmetros inválidos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "404":
+          description: Parceiro, estabelecimento ou rede de lojas não encontrado.
+        "500":
+          description: Internal Server Error
   /v1/order/start-cdc-sale:
     post:
       operationId: startCdcSale
@@ -199,126 +325,12 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
-  /v1/order/list:
-    get:
-      operationId: listOrders
-      tags:
-        - Pedido
-      summary: Listar pedidos.
-      description: Retorna todos os pedidos do parceiro com filtros opcionais.
-      parameters:
-        - name: status
-          in: query
-          description: |
-            Filtrar por status do pedido. Campo opcional.
-
-            Valores possíveis:
-            - 0 - Indefinido
-            - 1 - Em análise
-            - 2 - Aprovado
-            - 3 - Saldo indisponível
-            - 4 - Análise expirada
-            - 5 - Pagamento pendente
-            - 6 - Biometria recusada
-            - 7 - Biometria aprovada
-            - 8 - Pagamento recusado
-            - 9 - Comprado
-            - 10 - Não autorizado
-            - 11 - Autorização pendente
-            - 12 - Aguardando cadastro
-            - 13 - Venda não iniciada
-            - 14 - Cancelado
-            - 15 - Faturamento
-            - 16 - Concluído
-            - 17 - Congelado
-            - 18 - Confirmação de pagamento pendente
-          schema:
-            type: integer
-            format: int32
-        - name: documentoCliente
-          in: query
-          description: CPF do cliente (somente números). Campo opcional.
-          schema:
-            type: string
-            example: "12345678901"
-          example: "12345678901"
-        - name: dataInicio
-          in: query
-          description: Data de início do filtro no formato ISO-8601. Campo opcional.
-          schema:
-            type: string
-            format: date-time
-            example: "2025-01-01T00:00:00-03:00"
-          example: "2025-01-01T00:00:00-03:00"
-        - name: dataFim
-          in: query
-          description: Data de fim do filtro no formato ISO-8601. Campo opcional.
-          schema:
-            type: string
-            format: date-time
-            example: "2025-12-31T23:59:59-03:00"
-          example: "2025-12-31T23:59:59-03:00"
-        - name: numero
-          in: query
-          description: Número do pedido. Campo opcional.
-          schema:
-            type: integer
-            format: int64
-            example: 1001
-          example: 1001
-        - name: documentoLoja
-          in: query
-          description: CNPJ do estabelecimento (somente números). Campo opcional.
-          schema:
-            type: string
-            example: "12345678000195"
-          example: "12345678000195"
-        - name: descricao
-          in: query
-          description: Filtrar por descrição do pedido. Campo opcional.
-          schema:
-            type: string
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderIntegrationResponse"
-              example:
-                - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
-                  numero: 1001
-                  status:
-                    valor: 2
-                    descricao: "Aprovado"
-                  total: 1500.00
-                  nomeCliente: "João da Silva"
-                  documentoCliente: "12345678901"
-                  prazo: 12
-                  razaoSocialEstabelecimento: "Loja Exemplo LTDA"
-                  documentoEstabelecimento: "12345678000195"
-                  descricao: "Compra de eletrônicos"
-                  valorAprovado: 1500.00
-                  desembolsado: true
-                  criadoEm: "2025-01-15T10:30:00-03:00"
-                  desembolsadoEm: "2025-01-16T09:00:00-03:00"
-                  valorSolicitado: 1500.00
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-        "500":
-          description: Internal Server Error
   /v1/order/paged:
     get:
       operationId: pagedOrders
       tags:
         - Pedido
-      summary: Listar pedidos paginados.
+      summary: Listar pedidos.
       description: Retorna uma lista paginada de pedidos do parceiro com filtros opcionais.
       parameters:
         - name: status
@@ -434,13 +446,12 @@ paths:
                     criadoEm: "2025-01-15T10:30:00-03:00"
                     desembolsadoEm: "2025-01-16T09:00:00-03:00"
                     valorSolicitado: 1500.00
-                page:
-                  temProxima: true
-                  temAnterior: false
-                  numero: 1
-                  tamanho: 10
-                  total: 42
-                  numeroPaginaMaximo: 5
+                pagina:
+                  tem_proximo: true
+                  tem_anterior: false
+                  numero: 2
+                  tamanho: 15
+                  total: 45
         "400":
           description: Bad Request
           content:
@@ -503,67 +514,12 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
-  /v1/customer/list:
-    get:
-      operationId: listCustomers
-      tags:
-        - Cliente
-      summary: Listar clientes.
-      description: Retorna todos os clientes vinculados ao parceiro com filtros opcionais.
-      parameters:
-        - name: nome
-          in: query
-          description: Filtrar por nome do cliente. Campo opcional.
-          schema:
-            type: string
-            example: "Maria Souza"
-          example: "Maria Souza"
-        - name: documento
-          in: query
-          description: Filtrar por CPF do cliente (somente números). Campo opcional.
-          schema:
-            type: string
-            example: "12345678901"
-          example: "12345678901"
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Integration.Shared.Responses.Customer.CustomerIntegrationResponse"
-              example:
-                - id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
-                  nome: "Maria Souza"
-                  documento: "98765432100"
-                  endereco:
-                    rua: "Av. Paulista"
-                    cidade: "São Paulo"
-                    estado: "SP"
-                    bairro: "Bela Vista"
-                    cep: "01310-100"
-                    pais: "BR"
-                    numero: "1578"
-                    complemento: "Apto 42"
-                  dataDeNascimento: "1990-03-22T00:00:00Z"
-                  email: "maria.souza@email.com"
-                  celular: "+55 (11) 91234-5678"
-        "400":
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
-        "500":
-          description: Internal Server Error
   /v1/customer/paged:
     get:
       operationId: pagedCustomers
       tags:
         - Cliente
-      summary: Listar clientes paginados.
+      summary: Listar clientes.
       description: Retorna uma lista paginada de clientes vinculados ao parceiro com filtros opcionais.
       parameters:
         - name: nome
@@ -620,13 +576,12 @@ paths:
                     dataDeNascimento: "1990-03-22T00:00:00Z"
                     email: "maria.souza@email.com"
                     celular: "+55 (11) 91234-5678"
-                page:
-                  temProxima: true
-                  temAnterior: false
-                  numero: 1
-                  tamanho: 10
-                  total: 15
-                  numeroPaginaMaximo: 2
+                pagina:
+                  tem_proximo: true
+                  tem_anterior: false
+                  numero: 2
+                  tamanho: 15
+                  total: 45
         "400":
           description: Bad Request
           content:
@@ -637,6 +592,73 @@ paths:
           description: Internal Server Error
 components:
   schemas:
+    Integration.Shared.Responses.Order.ListSimulateInstallmentsSimplifiedIntegrationResponse:
+      type: object
+      properties:
+        valorTotalDebito:
+          type: number
+          format: double
+          description: Valor total que será pago pelo cliente.
+        prazo:
+          type: integer
+          format: int32
+          description: Quantidade de parcelas.
+        valorParcela:
+          type: number
+          format: double
+          description: Valor de cada parcela.
+      additionalProperties: false
+    Integration.Shared.Responses.Order.TaxRateIntegrationResponse:
+      type: object
+      properties:
+        taxa:
+          type: number
+          format: double
+          description: Percentual da taxa aplicada.
+        valor:
+          type: number
+          format: double
+          description: Valor monetário correspondente à taxa.
+      additionalProperties: false
+    Integration.Shared.Responses.Order.EstablishmentSimulationValuesIntegrationResponse:
+      type: object
+      properties:
+        antecipacao:
+          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
+        mdr:
+          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
+        valorVenda:
+          type: number
+          format: double
+        valorLiquido:
+          type: number
+          format: double
+      additionalProperties: false
+    Integration.Shared.Responses.Order.CustomerSimulationValuesIntegrationResponse:
+      type: object
+      properties:
+        taxaJuros:
+          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
+        iof:
+          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
+        tac:
+          type: number
+          format: double
+        valorVenda:
+          type: number
+          format: double
+        valorParcela:
+          type: number
+          format: double
+      additionalProperties: false
+    Integration.Shared.Responses.Order.SimulationValuesIntegrationResponse:
+      type: object
+      properties:
+        valoresEstabelecimento:
+          $ref: "#/components/schemas/Integration.Shared.Responses.Order.EstablishmentSimulationValuesIntegrationResponse"
+        valoresCliente:
+          $ref: "#/components/schemas/Integration.Shared.Responses.Order.CustomerSimulationValuesIntegrationResponse"
+      additionalProperties: false
     Common.Services.Cognito.AccessTokenResult:
       type: object
       properties:
@@ -662,8 +684,8 @@ components:
           items:
             $ref: "#/components/schemas/Integration.Shared.Responses.Customer.CustomerIntegrationResponse"
           readOnly: true
-        page:
-          $ref: "#/components/schemas/Core.Domain.Primitives.Page"
+        pagina:
+          $ref: "#/components/schemas/Core.Domain.Primitives.Pagina"
       additionalProperties: false
     Core.Domain.Primitives.IPagedResult_OrderIntegrationResponse:
       type: object
@@ -673,15 +695,15 @@ components:
           items:
             $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderIntegrationResponse"
           readOnly: true
-        page:
-          $ref: "#/components/schemas/Core.Domain.Primitives.Page"
+        pagina:
+          $ref: "#/components/schemas/Core.Domain.Primitives.Pagina"
       additionalProperties: false
-    Core.Domain.Primitives.Page:
+    Core.Domain.Primitives.Pagina:
       type: object
       properties:
-        temProxima:
+        tem_proximo:
           type: boolean
-        temAnterior:
+        tem_anterior:
           type: boolean
         numero:
           type: integer
@@ -690,9 +712,6 @@ components:
           type: integer
           format: int32
         total:
-          type: integer
-          format: int32
-        numeroPaginaMaximo:
           type: integer
           format: int32
       additionalProperties: false

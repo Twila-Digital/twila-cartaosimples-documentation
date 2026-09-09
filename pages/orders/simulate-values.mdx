@@ -1,0 +1,30 @@
+---
+title: 'Simular repasse'
+openapi: "GET /v1/order/simulate-values"
+---
+
+Calcula os valores da venda para o estabelecimento e para o cliente.
+
+A API identifica automaticamente o parceiro e a rede de lojas por meio do token de acesso. Você não precisa informar o identificador da rede.
+
+## Quem paga os juros
+
+Use o parâmetro `modeloJuros` para definir quem será responsável pelos juros.
+
+| Valor | Significado |
+| --- | --- |
+| `1` | **Cliente paga os juros.** Os juros são acrescentados ao valor financiado pelo cliente. |
+| `2` | **Estabelecimento assume os juros.** O cliente não paga juros, e o custo é assumido pelo estabelecimento. |
+
+## Como o valor será calculado
+
+Use o parâmetro `tipoValorCalculo` para definir o valor de referência da simulação.
+
+| Valor | Significado |
+| --- | --- |
+| `1` | **A partir do valor da venda.** O campo `valor` representa o valor bruto da venda. |
+| `2` | **A partir do valor líquido.** O campo `valor` representa o valor líquido que o estabelecimento deseja receber. A API calcula o valor bruto necessário. |
+
+<Note>
+  Envie os valores numéricos dos enums nos query parameters. Por exemplo: `modeloJuros=1&tipoValorCalculo=1`.
+</Note>
