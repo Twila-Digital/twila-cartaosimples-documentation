@@ -1,4 +1,8 @@
 ---
-title: 'Simular parcelas do pedido'
-openapi: "POST /v1/order/simulate-installments"
+title: 'Simular parcelas'
+openapi: "GET /v1/order/simulate-installments"
 ---
+
+Retorna as opções de parcelamento disponíveis para o valor informado.
+
+A API identifica automaticamente o parceiro e a rede de lojas por meio do token de acesso. Você não precisa informar o identificador da rede.

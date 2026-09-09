@@ -53,15 +53,20 @@
               "pages/orders/start-cdc-sale",
               "pages/orders/import-invoice",
               "pages/orders/get",
-              "pages/orders/list",
               "pages/orders/paged"
+            ]
+          },
+          {
+            "group": "Simulador",
+            "pages": [
+              "pages/orders/simulate-installments",
+              "pages/orders/simulate-values"
             ]
           },
           {
             "group": "Cliente",
             "pages": [
               "pages/customers/get",
-              "pages/customers/list",
               "pages/customers/paged"
             ]
           }
