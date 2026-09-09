@@ -105,24 +105,10 @@ paths:
                 $ref: "#/components/schemas/Integration.Shared.Responses.Order.SimulationValuesIntegrationResponse"
               example:
                 valoresEstabelecimento:
-                  antecipacao:
-                    taxa: 2.5
-                    valor: 243.75
-                  mdr:
-                    taxa: 1.99
-                    valor: 32.48
-                  valorVenda: 1500.00
-                  valorLiquido: 1223.77
+                  valorVenda: 7054.673721340388
+                  valorDesembolso: 5959.26
                 valoresCliente:
-                  taxaJuros:
-                    taxa: 2.0
-                    valor: 360.00
-                  iof:
-                    taxa: 3.38
-                    valor: 50.70
-                  tac: 100.00
-                  valorVenda: 1500.00
-                  valorParcela: 167.56
+                  valorParcela: 718.46
         "400":
           description: Parâmetros inválidos.
           content:
@@ -608,48 +594,25 @@ components:
           format: double
           description: Valor de cada parcela.
       additionalProperties: false
-    Integration.Shared.Responses.Order.TaxRateIntegrationResponse:
-      type: object
-      properties:
-        taxa:
-          type: number
-          format: double
-          description: Percentual da taxa aplicada.
-        valor:
-          type: number
-          format: double
-          description: Valor monetário correspondente à taxa.
-      additionalProperties: false
     Integration.Shared.Responses.Order.EstablishmentSimulationValuesIntegrationResponse:
       type: object
       properties:
-        antecipacao:
-          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
-        mdr:
-          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
         valorVenda:
           type: number
           format: double
-        valorLiquido:
+          description: Valor bruto da venda calculado na simulação.
+        valorDesembolso:
           type: number
           format: double
+          description: Valor líquido que será desembolsado ao estabelecimento.
       additionalProperties: false
     Integration.Shared.Responses.Order.CustomerSimulationValuesIntegrationResponse:
       type: object
       properties:
-        taxaJuros:
-          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
-        iof:
-          $ref: "#/components/schemas/Integration.Shared.Responses.Order.TaxRateIntegrationResponse"
-        tac:
-          type: number
-          format: double
-        valorVenda:
-          type: number
-          format: double
         valorParcela:
           type: number
           format: double
+          description: Valor de cada parcela que será paga pelo cliente.
       additionalProperties: false
     Integration.Shared.Responses.Order.SimulationValuesIntegrationResponse:
       type: object
