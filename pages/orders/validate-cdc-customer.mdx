@@ -9,9 +9,12 @@ Cria um novo pedido CDC com os dados do cliente e as informações da venda.
 
 O campo `endereco` é obrigatório, junto com seus subcampos `logradouro`, `cidade`, `estado`, `bairro`, `cep` e `numero`. Apenas `complemento` é opcional.
 
+- `estado` deve ser uma UF válida (uma das 27 siglas, ex.: `SP`, `RJ`, `MG`).
+- `cep` deve ter 8 dígitos — aceita com ou sem máscara (`01311-000` ou `01311000`).
+
 ## Documento do estabelecimento
 
-O campo `documentoEstabelecimento` (CNPJ) aceita o valor com ou sem máscara — por exemplo, `12.345.678/0001-95` e `12345678000195` são equivalentes.
+O campo `documentoEstabelecimento` (CNPJ) aceita o valor com ou sem máscara — por exemplo, `12.345.678/0001-95` e `12345678000195` são equivalentes — e precisa ser um CNPJ válido (dígitos verificadores corretos).
 
 ## Como o valor será calculado
 

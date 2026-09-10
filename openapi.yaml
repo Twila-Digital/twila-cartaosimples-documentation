@@ -878,10 +878,11 @@ components:
           type: string
           example: "São Paulo"
         estado:
-          minLength: 1
-          type: string
-          example: "SP"
+          minLength: 2
           maxLength: 2
+          type: string
+          description: "Sigla da UF (ex.: SP, RJ, MG)."
+          example: "SP"
         bairro:
           minLength: 1
           type: string
@@ -889,6 +890,7 @@ components:
         cep:
           minLength: 1
           type: string
+          description: CEP com 8 dígitos. Aceita com ou sem máscara (ex. `01311-000` ou `01311000`).
           example: "01311000"
         numero:
           minLength: 1
@@ -954,7 +956,7 @@ components:
         documentoEstabelecimento:
           minLength: 1
           type: string
-          description: CNPJ do estabelecimento. Aceita com ou sem máscara (ex. `12.345.678/0001-95` ou `12345678000195`).
+          description: CNPJ válido do estabelecimento. Aceita com ou sem máscara (ex. `12.345.678/0001-95` ou `12345678000195`).
           example: "12345678000195"
         valorSolicitado:
           type: number
