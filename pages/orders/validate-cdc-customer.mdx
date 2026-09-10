@@ -5,6 +5,14 @@ openapi: "POST /v1/order"
 
 Cria um novo pedido CDC com os dados do cliente e as informações da venda.
 
+## Endereço
+
+O campo `endereco` é obrigatório, junto com seus subcampos `logradouro`, `cidade`, `estado`, `bairro`, `cep` e `numero`. Apenas `complemento` é opcional.
+
+## Documento do estabelecimento
+
+O campo `documentoEstabelecimento` (CNPJ) aceita o valor com ou sem máscara — por exemplo, `12.345.678/0001-95` e `12345678000195` são equivalentes.
+
 ## Como o valor será calculado
 
 Use o parâmetro `tipoValorCalculo` para definir o valor de referência do pedido.
