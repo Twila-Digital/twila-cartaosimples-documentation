@@ -6,9 +6,41 @@ icon: 'webhook'
 
 Webhooks permitem que sua aplicação receba notificações em tempo real sobre eventos importantes da Parcele +.
 
-<Card title="Atenção — Webhook disponível" icon="triangle-exclamation" horizontal color="#ef4444">
-  Atualmente, **o único webhook disponível** é o de **atualização de status do Pedido**.
+<Card title="Gerenciamento pela API" icon="gear" horizontal color="#25c2a0">
+  Os webhooks podem ser criados, consultados, editados e excluídos diretamente pela API de integração.
 </Card>
+
+## Disponibilidade dos webhooks
+
+**Legenda:** 🟢 **Disponível agora** · 🟡 **Planejado**
+
+<CardGroup cols={3}>
+  <Card title="Cliente (1)" icon="user" color="#ff9800" style={{ borderColor: "#ff9800", borderWidth: "2px", backgroundColor: "rgba(255, 152, 0, 0.08)" }}>
+    **🟡 Em roadmap**
+
+    A configuração pode ser cadastrada e fica salva, mas **nenhum evento de cliente é enviado atualmente**.
+  </Card>
+
+  <Card title="Simulação (2)" icon="calculator" color="#ff9800" style={{ borderColor: "#ff9800", borderWidth: "2px", backgroundColor: "rgba(255, 152, 0, 0.08)" }}>
+    **🟡 Em roadmap**
+
+    A configuração pode ser cadastrada e fica salva, mas **nenhum evento de simulação é enviado atualmente**.
+  </Card>
+
+  <Card title="Pedido (3)" icon="clipboard-list" color="#4caf50" style={{ borderColor: "#4caf50", borderWidth: "2px", backgroundColor: "rgba(76, 175, 80, 0.08)" }}>
+    **🟢 Disponível**
+
+    Envia notificações para os eventos de pedido suportados.
+  </Card>
+</CardGroup>
+
+<Card title="Como funciona" icon="arrow-right-arrow-left" horizontal>
+  **Cadastrar configuração** → **Configuração salva** → **Envio conforme a disponibilidade do tipo**
+</Card>
+
+<Warning>
+  **Cliente e Simulação ainda não enviam notificações.** Os fluxos estão no roadmap, sem data de disponibilização definida.
+</Warning>
 
 ## <Icon icon="mobile" type="solid"/> Segmentação de webhooks
 
@@ -22,9 +54,7 @@ Webhooks permitem que sua aplicação receba notificações em tempo real sobre 
 
 ## <Icon icon="key" type="solid"/> Configurar webhooks
 
-<Card title="Fale com o atendimento" icon="headset" horizontal color="#25c2a0">
-  Para configurar os seus webhooks, entre em contato com o nosso atendimento pelo e-mail <Icon icon="envelope" type="solid"/> atendimento@parcelemais.com.br
-</Card>
+Consulte os endpoints nesta aba **Webhooks** para gerenciar as configurações vinculadas ao seu parceiro.
 
 ## <Icon icon="shield-halved" type="solid"/> Tipos de Autenticação
 
@@ -42,9 +72,9 @@ Aceitamos três tipos de autenticação para os webhooks:
   A autenticação Bearer JWT é um método de autenticação que usa um token JSON Web Token (JWT) para autenticar as requisições. Para usar a autenticação Bearer JWT, você precisará fornecer um token JWT válido ao configurar o webhook.
 </Card>
 
-## <Icon icon="code" type="solid"/> Payload do Webhook
+## <Icon icon="code" type="solid"/> Payload do webhook de Pedido
 
-O payload enviado para o endpoint do webhook é um JSON com a seguinte estrutura:
+Quando um evento de Pedido suportado ocorre, o payload enviado para o endpoint é um JSON com a seguinte estrutura:
 
 ```json
 {

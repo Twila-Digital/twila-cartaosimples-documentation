@@ -1,0 +1,18 @@
+---
+title: 'Editar webhook'
+openapi: "PUT /v1/webhooks/{tipo}"
+---
+
+Atualiza a URL e a autenticação de um webhook já cadastrado.
+
+O parâmetro `tipo` identifica o webhook: `1` para Cliente, `2` para Simulação e `3` para Pedido.
+
+O campo `tipoAutenticacao` aceita `1` para Nenhuma, `2` para Basic e `3` para JWT.
+
+<Warning>
+  **🟡 Em roadmap:** os tipos Cliente (`1`) e Simulação (`2`) podem ser configurados, mas **ainda não enviam notificações**. Atualmente, apenas o tipo Pedido (`3`) está disponível para os eventos suportados.
+</Warning>
+
+<Note>
+  Quando a credencial é omitida, a credencial atual é preservada. Ao selecionar autenticação `1` (Nenhuma), a credencial armazenada é removida.
+</Note>

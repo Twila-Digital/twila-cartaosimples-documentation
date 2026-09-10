@@ -1,0 +1,18 @@
+---
+title: 'Listar webhooks'
+openapi: "GET /v1/webhooks/paged"
+---
+
+Retorna de forma paginada os webhooks cadastrados pelo parceiro identificado automaticamente pelo token.
+
+<Warning>
+  Por segurança, as credenciais de autenticação nunca são retornadas por este endpoint.
+</Warning>
+
+## Tipos retornados
+
+O campo `tipo` utiliza `1` para Cliente, `2` para Simulação e `3` para Pedido. O campo `tipoAutenticacao` utiliza `1` para Nenhuma, `2` para Basic e `3` para JWT.
+
+<Warning>
+  **🟡 Configuração não significa envio:** um webhook de Cliente ou Simulação pode aparecer nesta lista, mas esses tipos ainda não realizam disparos. Eles estão em roadmap. Atualmente, apenas o tipo Pedido está disponível para os eventos suportados.
+</Warning>

@@ -1,0 +1,30 @@
+---
+title: 'Criar webhook'
+openapi: "POST /v1/webhooks"
+---
+
+Cria uma configuração de webhook para o parceiro identificado automaticamente pelo token de acesso.
+
+## Tipos de webhook
+
+| Valor | Tipo | Disponibilidade |
+| --- | --- | --- |
+| `1` | **Cliente** | 🟡 **Em roadmap** — pode ser cadastrado, mas ainda não envia notificações. |
+| `2` | **Simulação** | 🟡 **Em roadmap** — pode ser cadastrado, mas ainda não envia notificações. |
+| `3` | **Pedido** | 🟢 **Disponível** — envia notificações para os eventos de pedido suportados. |
+
+<Warning>
+  **Importante:** o cadastro dos tipos Cliente e Simulação apenas salva a configuração. **Nenhuma requisição será enviada** para a URL informada enquanto esses fluxos não forem disponibilizados.
+</Warning>
+
+## Tipos de autenticação
+
+| Valor | Significado |
+| --- | --- |
+| `1` | **Nenhuma** — a requisição é enviada sem credencial de autenticação. |
+| `2` | **Basic** — utiliza a credencial informada para autenticação HTTP Basic. |
+| `3` | **JWT** — utiliza a credencial informada como token Bearer JWT. |
+
+<Note>
+  A credencial é obrigatória para Basic e JWT. Só pode existir um webhook de cada tipo por parceiro.
+</Note>
