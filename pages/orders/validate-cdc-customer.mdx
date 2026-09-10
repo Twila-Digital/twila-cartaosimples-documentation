@@ -2,3 +2,22 @@
 title: 'Criar pedido'
 openapi: "POST /v1/order"
 ---
+
+Cria um novo pedido CDC com os dados do cliente e as informações da venda.
+
+## Como o valor será calculado
+
+Use o parâmetro `tipoValorCalculo` para definir o valor de referência do pedido.
+
+| Valor | Significado |
+| --- | --- |
+| `1` | **A partir do valor da venda.** O campo `valorSolicitado` representa o valor bruto da venda. |
+| `2` | **A partir do valor líquido.** O campo `valorSolicitado` representa o valor líquido que o estabelecimento deseja receber. |
+
+<Note>
+  Parâmetro opcional. Quando omitido, o padrão é `1` (valor bruto) — o mesmo comportamento de antes deste parâmetro existir.
+</Note>
+
+<Note>
+  Essa escolha vale para todo o ciclo de vida do pedido: o parcelamento simulado e o repasse ao estabelecimento passam a considerar `valorSolicitado` como líquido quando `tipoValorCalculo=2`, convertendo o valor bruto necessário internamente conforme o prazo escolhido pelo cliente.
+</Note>
