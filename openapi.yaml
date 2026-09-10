@@ -17,13 +17,28 @@ paths:
       parameters:
         - name: valorSolicitado
           in: query
-          description: Valor solicitado para a simulação. Deve ser igual ou superior a R$ 250,00.
+          description: Valor de referência para a simulação. Deve ser igual ou superior a R$ 250,00. O significado depende de `tipoValorCalculo`.
           required: true
           schema:
             type: number
             format: double
             minimum: 250
           example: 1500.00
+        - name: tipoValorCalculo
+          in: query
+          description: |
+            Define o valor de referência do cálculo:
+            - `1` — A partir do valor da venda. `valorSolicitado` representa o valor bruto da venda.
+            - `2` — A partir do valor líquido. `valorSolicitado` representa o valor líquido que o estabelecimento deseja receber.
+
+            Opcional. Quando omitido, o padrão é `1` (valor bruto).
+          required: false
+          schema:
+            type: integer
+            format: int32
+            enum: [1, 2]
+            default: 1
+          example: 1
       responses:
         "200":
           description: Opções de parcelamento calculadas com sucesso.
