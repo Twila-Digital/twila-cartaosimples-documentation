@@ -948,10 +948,12 @@ components:
         cpf:
           minLength: 1
           type: string
+          description: CPF válido do cliente. Aceita com ou sem máscara (ex. `123.456.789-01` ou `12345678901`).
           example: "12345678901"
         celular:
           minLength: 1
           type: string
+          description: Telefone celular do cliente, com código do país. Aceita com ou sem máscara (ex. `+55 (11) 91234-5678` ou `+5511912345678`).
           example: "+55 (11) 91234-5678"
         documentoEstabelecimento:
           minLength: 1
