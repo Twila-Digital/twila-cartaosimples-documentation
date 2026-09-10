@@ -32,3 +32,7 @@ Use o parâmetro `tipoValorCalculo` para definir o valor de referência da simul
 <Note>
   Envie os valores numéricos dos enums nos query parameters. Por exemplo: `modeloJuros=1&tipoValorCalculo=1`.
 </Note>
+
+## Prazo
+
+O parâmetro `prazo` deve estar dentro do intervalo configurado para a rede de lojas do parceiro. Um prazo fora desse intervalo retorna `400` com o erro `Order.TermOutOfRange`, no mesmo formato usado para os demais erros de validação da API (`tipo`, `titulo`, `status`, `detalhe`, `erros`).

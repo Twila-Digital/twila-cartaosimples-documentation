@@ -80,7 +80,9 @@ paths:
           example: 1500.00
         - name: prazo
           in: query
-          description: Quantidade de parcelas da simulação.
+          description: |
+            Quantidade de parcelas da simulação. Deve estar dentro do intervalo de prazos configurado para a rede de lojas do parceiro.
+            Fora desse intervalo, a API retorna `400` com o erro `Order.TermOutOfRange`.
           required: true
           schema:
             type: integer
