@@ -860,32 +860,41 @@ components:
           type: string
       additionalProperties: false
     WebIntegration.Endpoints.Order.Requests.AddressRequestContent:
+      required:
+        - logradouro
+        - cidade
+        - estado
+        - bairro
+        - cep
+        - numero
       type: object
       properties:
         logradouro:
+          minLength: 1
           type: string
-          nullable: true
           example: "Av. Paulista"
         cidade:
+          minLength: 1
           type: string
-          nullable: true
           example: "São Paulo"
         estado:
-          type: string
-          nullable: true
-          example: "SP"
+          minLength: 2
           maxLength: 2
-        bairro:
           type: string
-          nullable: true
+          description: "Sigla da UF (ex.: SP, RJ, MG)."
+          example: "SP"
+        bairro:
+          minLength: 1
+          type: string
           example: "Bela Vista"
         cep:
+          minLength: 1
           type: string
-          nullable: true
+          description: CEP com 8 dígitos. Aceita com ou sem máscara (ex. `01311-000` ou `01311000`).
           example: "01311000"
         numero:
+          minLength: 1
           type: string
-          nullable: true
           example: "1578"
         complemento:
           type: string
@@ -931,6 +940,7 @@ components:
         - dataDeNascimento
         - documentoEstabelecimento
         - email
+        - endereco
         - nome
         - valorSolicitado
       type: object
@@ -946,6 +956,7 @@ components:
         documentoEstabelecimento:
           minLength: 1
           type: string
+          description: CNPJ válido do estabelecimento. Aceita com ou sem máscara (ex. `12.345.678/0001-95` ou `12345678000195`).
           example: "12345678000195"
         valorSolicitado:
           type: number
