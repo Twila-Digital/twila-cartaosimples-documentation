@@ -17,13 +17,28 @@ paths:
       parameters:
         - name: valorSolicitado
           in: query
-          description: Valor solicitado para a simulação. Deve ser igual ou superior a R$ 250,00.
+          description: Valor de referência para a simulação. Deve ser igual ou superior a R$ 250,00. O significado depende de `tipoValorCalculo`.
           required: true
           schema:
             type: number
             format: double
             minimum: 250
           example: 1500.00
+        - name: tipoValorCalculo
+          in: query
+          description: |
+            Define o valor de referência do cálculo:
+            - `1` — A partir do valor da venda. `valorSolicitado` representa o valor bruto da venda.
+            - `2` — A partir do valor líquido. `valorSolicitado` representa o valor líquido que o estabelecimento deseja receber.
+
+            Opcional. Quando omitido, o padrão é `1` (valor bruto).
+          required: false
+          schema:
+            type: integer
+            format: int32
+            enum: [1, 2]
+            default: 1
+          example: 1
       responses:
         "200":
           description: Opções de parcelamento calculadas com sucesso.
@@ -65,7 +80,9 @@ paths:
           example: 1500.00
         - name: prazo
           in: query
-          description: Quantidade de parcelas da simulação.
+          description: |
+            Quantidade de parcelas da simulação. Deve estar dentro do intervalo de prazos configurado para a rede de lojas do parceiro.
+            Fora desse intervalo, a API retorna `400` com o erro `Order.TermOutOfRange`.
           required: true
           schema:
             type: integer
@@ -75,14 +92,14 @@ paths:
         - name: modeloJuros
           in: query
           description: |
-            Define quem paga os juros:
-            - `1` — Cliente paga os juros. Os juros são acrescentados ao valor financiado pelo cliente.
-            - `2` — Estabelecimento assume os juros. O cliente não paga juros, e o custo é assumido pelo estabelecimento.
+            Define quem paga os juros. Por enquanto, use apenas `1`.
+            - `1` — Cliente (disponível).
+            - `2` — Estabelecimento (em breve; ainda não disponível).
           required: true
           schema:
             type: integer
             format: int32
-            enum: [1, 2]
+            enum: [1]
           example: 1
         - name: tipoValorCalculo
           in: query
@@ -211,8 +228,8 @@ paths:
               arquivoBase64: "JVBERi0xLjQKJeLjz9MKMSAwIG9iago..."
               nomeArquivo: "nota-fiscal.pdf"
       responses:
-        "200":
-          description: OK
+        "204":
+          description: Nota fiscal importada com sucesso.
         "400":
           description: Bad Request
           content:
@@ -349,7 +366,7 @@ paths:
             format: int32
         - name: documentoCliente
           in: query
-          description: CPF do cliente (somente números). Campo opcional.
+          description: CPF do cliente. Campo opcional. Aceita com ou sem máscara (ex. `123.456.789-01` ou `12345678901`).
           schema:
             type: string
             example: "12345678901"
@@ -380,7 +397,7 @@ paths:
           example: 1001
         - name: documentoLoja
           in: query
-          description: CNPJ do estabelecimento (somente números). Campo opcional.
+          description: CNPJ do estabelecimento. Campo opcional. Aceita com ou sem máscara (ex. `12.345.678/0001-95` ou `12345678000195`).
           schema:
             type: string
             example: "12345678000195"
@@ -517,7 +534,7 @@ paths:
           example: "Maria Souza"
         - name: documento
           in: query
-          description: Filtrar por CPF do cliente (somente números). Campo opcional.
+          description: Filtrar por CPF do cliente. Campo opcional. Aceita com ou sem máscara (ex. `123.456.789-01` ou `12345678901`).
           schema:
             type: string
             example: "12345678901"
@@ -1066,32 +1083,41 @@ components:
           type: string
       additionalProperties: false
     WebIntegration.Endpoints.Order.Requests.AddressRequestContent:
+      required:
+        - logradouro
+        - cidade
+        - estado
+        - bairro
+        - cep
+        - numero
       type: object
       properties:
         logradouro:
+          minLength: 1
           type: string
-          nullable: true
           example: "Av. Paulista"
         cidade:
+          minLength: 1
           type: string
-          nullable: true
           example: "São Paulo"
         estado:
-          type: string
-          nullable: true
-          example: "SP"
+          minLength: 2
           maxLength: 2
-        bairro:
           type: string
-          nullable: true
+          description: "Sigla da UF (ex.: SP, RJ, MG)."
+          example: "SP"
+        bairro:
+          minLength: 1
+          type: string
           example: "Bela Vista"
         cep:
+          minLength: 1
           type: string
-          nullable: true
+          description: CEP com 8 dígitos. Aceita com ou sem máscara (ex. `01311-000` ou `01311000`).
           example: "01311000"
         numero:
+          minLength: 1
           type: string
-          nullable: true
           example: "1578"
         complemento:
           type: string
@@ -1137,6 +1163,7 @@ components:
         - dataDeNascimento
         - documentoEstabelecimento
         - email
+        - endereco
         - nome
         - valorSolicitado
       type: object
@@ -1144,18 +1171,22 @@ components:
         cpf:
           minLength: 1
           type: string
+          description: CPF válido do cliente. Aceita com ou sem máscara (ex. `123.456.789-01` ou `12345678901`).
           example: "12345678901"
         celular:
           minLength: 1
           type: string
+          description: Telefone celular do cliente, com código do país. Aceita com ou sem máscara (ex. `+55 (11) 91234-5678` ou `+5511912345678`).
           example: "+55 (11) 91234-5678"
         documentoEstabelecimento:
           minLength: 1
           type: string
+          description: CNPJ válido do estabelecimento. Aceita com ou sem máscara (ex. `12.345.678/0001-95` ou `12345678000195`).
           example: "12345678000195"
         valorSolicitado:
           type: number
           format: double
+          description: Valor bruto da venda.
           example: 1500.00
         nome:
           minLength: 1
@@ -1171,6 +1202,13 @@ components:
           example: "2023-11-07T05:31:56Z"
         endereco:
           $ref: "#/components/schemas/WebIntegration.Endpoints.Order.Requests.AddressRequestContent"
+          description: |
+            Define o valor de referência do pedido:
+            - `1` — A partir do valor da venda. `valorSolicitado` representa o valor bruto da venda.
+            - `2` — A partir do valor líquido. `valorSolicitado` representa o valor líquido que o estabelecimento deseja receber.
+
+            Opcional. Quando omitido, o padrão é `1` (valor bruto).
+          example: 1
       additionalProperties: false
   securitySchemes:
     bearerAuth:

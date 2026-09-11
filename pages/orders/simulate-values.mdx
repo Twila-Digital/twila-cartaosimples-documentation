@@ -11,10 +11,14 @@ A API identifica automaticamente o parceiro e a rede de lojas por meio do token 
 
 Use o parâmetro `modeloJuros` para definir quem será responsável pelos juros.
 
-| Valor | Significado |
-| --- | --- |
-| `1` | **Cliente paga os juros.** Os juros são acrescentados ao valor financiado pelo cliente. |
-| `2` | **Estabelecimento assume os juros.** O cliente não paga juros, e o custo é assumido pelo estabelecimento. |
+<Warning>
+  Por enquanto, use apenas `modeloJuros=1`. A opção `2` ainda não está disponível.
+</Warning>
+
+| Valor | Disponibilidade | Quem paga os juros |
+| --- | --- | --- |
+| `1` | **Disponível** | Cliente |
+| `2` | **Em breve** | Estabelecimento |
 
 ## Como o valor será calculado
 
@@ -28,3 +32,7 @@ Use o parâmetro `tipoValorCalculo` para definir o valor de referência da simul
 <Note>
   Envie os valores numéricos dos enums nos query parameters. Por exemplo: `modeloJuros=1&tipoValorCalculo=1`.
 </Note>
+
+## Prazo
+
+O parâmetro `prazo` deve estar dentro do intervalo configurado para a rede de lojas do parceiro. Um prazo fora desse intervalo retorna `400` com o erro `Order.TermOutOfRange`, no mesmo formato usado para os demais erros de validação da API (`tipo`, `titulo`, `status`, `detalhe`, `erros`).

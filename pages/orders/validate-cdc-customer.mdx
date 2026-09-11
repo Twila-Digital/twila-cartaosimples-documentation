@@ -2,3 +2,24 @@
 title: 'Criar pedido'
 openapi: "POST /v1/order"
 ---
+
+Cria um novo pedido CDC com os dados do cliente e as informações da venda.
+
+## Documentos e contato
+
+Os campos `cpf`, `celular` e `documentoEstabelecimento` aceitam o valor com ou sem máscara:
+
+- `cpf`: `123.456.789-01` ou `12345678901`.
+- `celular`: `+55 (11) 91234-5678` ou `+5511912345678`.
+- `documentoEstabelecimento`: `12.345.678/0001-95` ou `12345678000195`.
+
+`cpf` e `documentoEstabelecimento` precisam ser documentos válidos (dígitos verificadores corretos).
+
+## Endereço
+
+O campo `endereco` é obrigatório, junto com seus subcampos `logradouro`, `cidade`, `estado`, `bairro`, `cep` e `numero`. Apenas `complemento` é opcional.
+
+- `estado` deve ser uma UF válida (uma das 27 siglas, ex.: `SP`, `RJ`, `MG`).
+- `cep` deve ter 8 dígitos — aceita com ou sem máscara (`01311-000` ou `01311000`).
+
+O campo `valorSolicitado` representa sempre o valor bruto da venda.

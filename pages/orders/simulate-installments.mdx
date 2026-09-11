@@ -6,3 +6,21 @@ openapi: "GET /v1/order/simulate-installments"
 Retorna as opções de parcelamento disponíveis para o valor informado.
 
 A API identifica automaticamente o parceiro e a rede de lojas por meio do token de acesso. Você não precisa informar o identificador da rede.
+
+## Como o valor será calculado
+
+Use o parâmetro `tipoValorCalculo` para definir o valor de referência da simulação.
+
+| Valor | Significado |
+| --- | --- |
+| `1` | **A partir do valor da venda.** O campo `valorSolicitado` representa o valor bruto da venda. |
+| `2` | **A partir do valor líquido.** O campo `valorSolicitado` representa o valor líquido que o estabelecimento deseja receber. A API calcula o valor bruto necessário para cada prazo. |
+
+<Note>
+  Parâmetro opcional.
+  Quando omitido, o padrão é `1` (valor bruto).
+</Note>
+
+<Note>
+  Para o mesmo estabelecimento, prazo e valor líquido, a parcela retornada aqui com `tipoValorCalculo=2` é a mesma retornada por [Simular repasse](/pages/orders/simulate-values) para o mesmo prazo.
+</Note>
