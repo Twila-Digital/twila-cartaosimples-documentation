@@ -32,9 +32,6 @@ Use o parâmetro `tipoValorCalculo` para definir o valor de referência do pedid
 | `2` | **A partir do valor líquido.** O campo `valorSolicitado` representa o valor líquido que o estabelecimento deseja receber. |
 
 <Note>
-  Parâmetro opcional. Quando omitido, o padrão é `1` (valor bruto) — o mesmo comportamento de antes deste parâmetro existir.
-</Note>
-
-<Note>
-  Essa escolha vale para todo o ciclo de vida do pedido: o parcelamento simulado e o repasse ao estabelecimento passam a considerar `valorSolicitado` como líquido quando `tipoValorCalculo=2`, convertendo o valor bruto necessário internamente conforme o prazo escolhido pelo cliente.
+  Parâmetro opcional.
+  Quando omitido, o padrão é `1` (valor bruto).
 </Note>
