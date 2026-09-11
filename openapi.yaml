@@ -962,7 +962,7 @@ components:
     Integration.Shared.Responses.Order.OrderStatus:
       type: object
       description: |
-        Status do pedido. Consulte a legenda completa em [Webhooks → Legenda do EnumStatus](/webhooks).
+        Status do pedido. Consulte os valores enviados em [Webhooks → Status enviados pelo webhook](/webhooks#status-enviados-pelo-webhook).
       properties:
         valor:
           type: integer
