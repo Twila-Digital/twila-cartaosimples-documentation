@@ -44,7 +44,7 @@ Webhooks permitem que sua aplicação receba notificações em tempo real sobre 
 
 ## <Icon icon="mobile" type="solid"/> Segmentação de webhooks
 
-<Card title="Ambientes e Webhooks" icon="book" horizontal>
+<Card title="Ambientes e webhooks" icon="book" horizontal>
   Os webhooks são específicos para cada ambiente:
   - Webhooks criados em **desenvolvimento** recebem notificações apenas do ambiente de desenvolvimento
   - Webhooks criados em **produção** recebem notificações apenas de dados reais
@@ -56,11 +56,11 @@ Webhooks permitem que sua aplicação receba notificações em tempo real sobre 
 
 Consulte os endpoints nesta aba **Webhooks** para gerenciar as configurações vinculadas ao seu parceiro.
 
-## <Icon icon="shield-halved" type="solid"/> Tipos de Autenticação
+## <Icon icon="shield-halved" type="solid"/> Tipos de autenticação
 
 Aceitamos três tipos de autenticação para os webhooks:
 
-<Card title="Sem Autenticação (Não recomendado)" icon="triangle-exclamation" horizontal color="#ef4444">
+<Card title="Sem autenticação (não recomendado)" icon="triangle-exclamation" horizontal color="#ef4444">
   Se o seu endpoint não requer autenticação, você pode optar por não usar nenhum método de autenticação. Nesse caso, as notificações serão enviadas para o seu endpoint sem nenhum cabeçalho de autenticação.
 </Card>
 
@@ -80,7 +80,7 @@ Quando um evento de Pedido suportado ocorre, o payload enviado para o endpoint �
 {
   "id_pedido": "00000000-0000-0000-0000-000000000000",
   "enum_status": 1,
-  "status": "Analysing",
+  "status": "Analysing"
 }
 ```
 
@@ -89,10 +89,6 @@ Quando um evento de Pedido suportado ocorre, o payload enviado para o endpoint �
 Os valores abaixo são os status que podem ser enviados no campo `enum_status` do webhook de Pedido.
 
 <CardGroup>
-  <Card title="0 - Undefined" icon="circle-question" color="#9e9e9e" horizontal>
-    Status indefinido.
-  </Card>
-
   <Card title="1 - Analysing" icon="magnifying-glass-chart" color="#ff9800" horizontal>
     O pedido está sendo analisado automaticamente.
   </Card>

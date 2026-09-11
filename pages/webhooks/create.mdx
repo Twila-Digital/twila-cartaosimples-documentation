@@ -14,7 +14,7 @@ Cria uma configuração de webhook para o parceiro identificado automaticamente 
 | `3` | **Pedido** | 🟢 **Disponível** — envia notificações para os eventos de pedido suportados. |
 
 <Warning>
-  **Importante:** o cadastro dos tipos Cliente e Simulação apenas salva a configuração. **Nenhuma requisição será enviada** para a URL informada enquanto esses fluxos não forem disponibilizados.
+  Os tipos Cliente (`1`) e Simulação (`2`) podem ser configurados, mas ainda não enviam notificações. Atualmente, apenas o tipo Pedido (`3`) está disponível para os eventos suportados.
 </Warning>
 
 ## Tipos de autenticação
@@ -26,5 +26,5 @@ Cria uma configuração de webhook para o parceiro identificado automaticamente 
 | `3` | **JWT** — utiliza a credencial informada como token Bearer JWT. |
 
 <Note>
-  A credencial é obrigatória para Basic e JWT. Só pode existir um webhook de cada tipo por parceiro.
+  A credencial é obrigatória para Basic e JWT. Pode existir apenas um webhook de cada tipo por parceiro.
 </Note>
