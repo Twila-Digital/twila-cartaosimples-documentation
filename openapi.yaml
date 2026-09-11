@@ -593,8 +593,232 @@ paths:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
+  /v1/webhooks:
+    post:
+      operationId: createWebHook
+      tags:
+        - Webhook
+      summary: Criar webhook.
+      description: Cadastra um webhook para o parceiro identificado automaticamente pelo token de acesso. Cliente e Simulação podem ser configurados, mas seus fluxos de envio ainda estão em roadmap. Atualmente, os disparos estão disponíveis para Pedido.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateWebHookRequest"
+            example:
+              tipo: 3
+              url: "https://parceiro.exemplo.com/webhooks/pedidos"
+              tipoAutenticacao: 3
+              credencial: "seu-token-jwt"
+      responses:
+        "200":
+          description: Webhook criado com sucesso.
+        "400":
+          description: Dados inválidos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "404":
+          description: Parceiro não encontrado.
+        "409":
+          description: Já existe um webhook cadastrado para o tipo informado.
+        "500":
+          description: Internal Server Error
+  /v1/webhooks/paged:
+    get:
+      operationId: pagedWebHooks
+      tags:
+        - Webhook
+      summary: Listar webhooks.
+      description: Retorna os webhooks cadastrados pelo parceiro. As credenciais de autenticação nunca são retornadas. Configurações de Cliente e Simulação podem aparecer na lista, embora esses fluxos ainda não realizem disparos.
+      parameters:
+        - name: pagina
+          in: query
+          description: "Número da página. Padrão: 1."
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: tamanhoPagina
+          in: query
+          description: "Quantidade de itens por página. Padrão: 10. Máximo: 100."
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+      responses:
+        "200":
+          description: Webhooks retornados com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PagedWebHookIntegrationResponse"
+              example:
+                items:
+                  - tipo: 3
+                    url: "https://parceiro.exemplo.com/webhooks/pedidos"
+                    tipoAutenticacao: 3
+                pagina:
+                  tem_proximo: false
+                  tem_anterior: false
+                  numero: 1
+                  tamanho: 10
+                  total: 1
+        "400":
+          description: Parâmetros de paginação inválidos.
+        "404":
+          description: Parceiro não encontrado.
+        "500":
+          description: Internal Server Error
+  /v1/webhooks/{tipo}:
+    put:
+      operationId: updateWebHook
+      tags:
+        - Webhook
+      summary: Editar webhook.
+      description: Atualiza o webhook do tipo informado. Se a credencial for omitida, a credencial atual será preservada. Cliente e Simulação podem ser configurados, mas seus fluxos de envio ainda estão em roadmap.
+      parameters:
+        - $ref: "#/components/parameters/WebHookType"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateWebHookRequest"
+            example:
+              url: "https://parceiro.exemplo.com/webhooks/pedidos"
+              tipoAutenticacao: 2
+              credencial: "usuario:senha"
+      responses:
+        "200":
+          description: Webhook atualizado com sucesso.
+        "400":
+          description: Dados inválidos.
+        "404":
+          description: Parceiro ou webhook não encontrado.
+        "500":
+          description: Internal Server Error
+    delete:
+      operationId: deleteWebHook
+      tags:
+        - Webhook
+      summary: Excluir webhook.
+      description: Exclui o webhook do tipo informado para o parceiro identificado pelo token.
+      parameters:
+        - $ref: "#/components/parameters/WebHookType"
+      responses:
+        "200":
+          description: Webhook excluído com sucesso.
+        "400":
+          description: Tipo de webhook inválido.
+        "404":
+          description: Parceiro ou webhook não encontrado.
+        "500":
+          description: Internal Server Error
 components:
+  parameters:
+    WebHookType:
+      name: tipo
+      in: path
+      required: true
+      description: |
+        Tipo do webhook:
+        - `1` — Cliente: configuração disponível; fluxo de envio em roadmap.
+        - `2` — Simulação: configuração disponível; fluxo de envio em roadmap.
+        - `3` — Pedido: envio disponível para os eventos suportados.
+      schema:
+        type: integer
+        format: int32
+        enum: [1, 2, 3]
   schemas:
+    CreateWebHookRequest:
+      required: [tipo, url, tipoAutenticacao]
+      type: object
+      properties:
+        tipo:
+          type: integer
+          format: int32
+          enum: [1, 2, 3]
+          description: "1: Cliente (fluxo em roadmap); 2: Simulação (fluxo em roadmap); 3: Pedido (envio disponível)."
+        url:
+          type: string
+          format: uri
+          description: URL HTTP ou HTTPS que receberá as notificações.
+        tipoAutenticacao:
+          type: integer
+          format: int32
+          enum: [1, 2, 3]
+          description: "1: Nenhuma; 2: Basic; 3: JWT."
+        credencial:
+          type: string
+          nullable: true
+          description: Obrigatória para Basic e JWT. Não deve ser enviada quando não houver autenticação.
+      additionalProperties: false
+    UpdateWebHookRequest:
+      required: [url, tipoAutenticacao]
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: URL HTTP ou HTTPS que receberá as notificações.
+        tipoAutenticacao:
+          type: integer
+          format: int32
+          enum: [1, 2, 3]
+          description: "1: Nenhuma; 2: Basic; 3: JWT."
+        credencial:
+          type: string
+          nullable: true
+          description: Quando omitida, mantém a credencial atual. É removida quando o tipo de autenticação é Nenhuma.
+      additionalProperties: false
+    WebHookIntegrationResponse:
+      type: object
+      properties:
+        tipo:
+          type: integer
+          format: int32
+          enum: [1, 2, 3]
+          description: "1: Cliente (fluxo em roadmap); 2: Simulação (fluxo em roadmap); 3: Pedido (envio disponível)."
+        url:
+          type: string
+          format: uri
+        tipoAutenticacao:
+          type: integer
+          format: int32
+          enum: [1, 2, 3]
+          description: "1: Nenhuma; 2: Basic; 3: JWT."
+      additionalProperties: false
+    PagedWebHookIntegrationResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/WebHookIntegrationResponse"
+        pagina:
+          $ref: "#/components/schemas/PaginationIntegrationResponse"
+      additionalProperties: false
+    PaginationIntegrationResponse:
+      type: object
+      properties:
+        tem_proximo:
+          type: boolean
+        tem_anterior:
+          type: boolean
+        numero:
+          type: integer
+          format: int32
+        tamanho:
+          type: integer
+          format: int32
+        total:
+          type: integer
+          format: int32
+      additionalProperties: false
     Integration.Shared.Responses.Order.ListSimulateInstallmentsSimplifiedIntegrationResponse:
       type: object
       properties:
@@ -755,7 +979,7 @@ components:
     Integration.Shared.Responses.Order.OrderStatus:
       type: object
       description: |
-        Status do pedido. Consulte a legenda completa em [Webhooks → Legenda do EnumStatus](/webhooks).
+        Status do pedido. Consulte os valores enviados em [Webhooks → Status enviados pelo webhook](/webhooks#status-enviados-pelo-webhook).
       properties:
         valor:
           type: integer

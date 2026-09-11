@@ -29,7 +29,6 @@
               "pages/introduction",
               "pages/development",
               "pages/authentication",
-              "pages/webhooks",
               "pages/test-cards"
             ]
           },
@@ -68,6 +67,24 @@
             "pages": [
               "pages/customers/get",
               "pages/customers/paged"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Webhooks",
+        "groups": [
+          {
+            "group": "Visão geral",
+            "pages": ["pages/webhooks"]
+          },
+          {
+            "group": "Webhooks",
+            "pages": [
+              "pages/webhooks/create",
+              "pages/webhooks/paged",
+              "pages/webhooks/update",
+              "pages/webhooks/delete"
             ]
           }
         ]
