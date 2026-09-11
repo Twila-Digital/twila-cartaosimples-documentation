@@ -229,8 +229,8 @@ paths:
               arquivoBase64: "JVBERi0xLjQKJeLjz9MKMSAwIG9iago..."
               nomeArquivo: "nota-fiscal.pdf"
       responses:
-        "200":
-          description: OK
+        "204":
+          description: Nota fiscal importada com sucesso.
         "400":
           description: Bad Request
           content:
