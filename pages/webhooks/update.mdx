@@ -5,13 +5,25 @@ openapi: "PUT /v1/webhooks/{tipo}"
 
 Atualiza a URL e a autenticação de um webhook já cadastrado.
 
-O parâmetro `tipo` identifica o webhook: `1` para Cliente, `2` para Simulação e `3` para Pedido.
+## Tipos de webhook
 
-O campo `tipoAutenticacao` aceita `1` para Nenhuma, `2` para Basic e `3` para JWT.
+| Valor | Tipo | Disponibilidade |
+| --- | --- | --- |
+| `1` | **Cliente** | 🟡 **Em roadmap** — pode ser cadastrado, mas ainda não envia notificações. |
+| `2` | **Simulação** | 🟡 **Em roadmap** — pode ser cadastrado, mas ainda não envia notificações. |
+| `3` | **Pedido** | 🟢 **Disponível** — envia notificações para os eventos de pedido suportados. |
 
 <Warning>
-  **🟡 Em roadmap:** os tipos Cliente (`1`) e Simulação (`2`) podem ser configurados, mas **ainda não enviam notificações**. Atualmente, apenas o tipo Pedido (`3`) está disponível para os eventos suportados.
+  Os tipos Cliente (`1`) e Simulação (`2`) podem ser configurados, mas ainda não enviam notificações. Atualmente, apenas o tipo Pedido (`3`) está disponível para os eventos suportados.
 </Warning>
+
+## Tipos de autenticação
+
+| Valor | Significado |
+| --- | --- |
+| `1` | **Nenhuma** — a requisição é enviada sem credencial de autenticação. |
+| `2` | **Basic** — utiliza a credencial informada para autenticação HTTP Basic. |
+| `3` | **JWT** — utiliza a credencial informada como token Bearer JWT. |
 
 <Note>
   Quando a credencial é omitida, a credencial atual é preservada. Ao selecionar autenticação `1` (Nenhuma), a credencial armazenada é removida.

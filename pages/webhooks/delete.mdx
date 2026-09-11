@@ -5,4 +5,14 @@ openapi: "DELETE /v1/webhooks/{tipo}"
 
 Exclui um webhook do parceiro identificado automaticamente pelo token de acesso.
 
-O parâmetro `tipo` aceita `1` para Cliente, `2` para Simulação e `3` para Pedido.
+## Tipos de webhook
+
+| Valor | Tipo | Disponibilidade |
+| --- | --- | --- |
+| `1` | **Cliente** | 🟡 **Em roadmap** — pode ser cadastrado, mas ainda não envia notificações. |
+| `2` | **Simulação** | 🟡 **Em roadmap** — pode ser cadastrado, mas ainda não envia notificações. |
+| `3` | **Pedido** | 🟢 **Disponível** — envia notificações para os eventos de pedido suportados. |
+
+<Warning>
+  Os tipos Cliente (`1`) e Simulação (`2`) podem ser excluídos, embora ainda não enviem notificações. Atualmente, apenas o tipo Pedido (`3`) está disponível para os eventos suportados.
+</Warning>
