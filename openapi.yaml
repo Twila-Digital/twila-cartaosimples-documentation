@@ -367,7 +367,7 @@ paths:
             format: int32
         - name: documentoCliente
           in: query
-          description: CPF do cliente (somente números). Campo opcional.
+          description: CPF do cliente. Campo opcional. Aceita com ou sem máscara (ex. `123.456.789-01` ou `12345678901`).
           schema:
             type: string
             example: "12345678901"
@@ -398,7 +398,7 @@ paths:
           example: 1001
         - name: documentoLoja
           in: query
-          description: CNPJ do estabelecimento (somente números). Campo opcional.
+          description: CNPJ do estabelecimento. Campo opcional. Aceita com ou sem máscara (ex. `12.345.678/0001-95` ou `12345678000195`).
           schema:
             type: string
             example: "12345678000195"
@@ -535,7 +535,7 @@ paths:
           example: "Maria Souza"
         - name: documento
           in: query
-          description: Filtrar por CPF do cliente (somente números). Campo opcional.
+          description: Filtrar por CPF do cliente. Campo opcional. Aceita com ou sem máscara (ex. `123.456.789-01` ou `12345678901`).
           schema:
             type: string
             example: "12345678901"
