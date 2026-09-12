@@ -1,0 +1,76 @@
+---
+title: 'Erros e idempotência'
+description: 'Formato de erros, rastreamento de requisições e reenvio seguro'
+icon: 'triangle-exclamation'
+---
+
+## <Icon icon="triangle-exclamation" type="solid"/> Formato de erro
+
+Toda resposta de erro segue o padrão [RFC 7807 (Problem Details)](https://tools.ietf.org/html/rfc7807), com os campos em português:
+
+```json
+{
+  "tipo": "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+  "titulo": "Requisição inválida.",
+  "status": 400,
+  "detalhe": "O campo 'cpf' é obrigatório.",
+  "instancia": "/v1/order",
+  "erros": {
+    "cpf": ["O campo 'cpf' é obrigatório."]
+  },
+  "correlationId": "0HN7E4B8Q9K3D:00000001"
+}
+```
+
+<Card title="erros vs. detalhe" icon="list-check" horizontal>
+  O campo `erros` aparece apenas em erros de **validação de payload** (um ou mais campos inválidos, detalhados por nome). Erros de **regra de negócio** (ex.: pedido em status incompatível, saldo indisponível) não preenchem `erros` — a explicação vem apenas em `detalhe`.
+</Card>
+
+## <Icon icon="magnifying-glass" type="solid"/> Rastreamento com CorrelationId
+
+Toda requisição pode enviar um cabeçalho `CorrelationId` com um identificador de sua escolha. Se você não enviar um, a API gera um automaticamente.
+
+O valor é sempre devolvido:
+- No cabeçalho de resposta `CorrelationId`.
+- No campo `correlationId` do corpo, em respostas de erro.
+
+Guarde esse valor nos seus logs — é o identificador que o suporte da Parcele+ usa para localizar rapidamente uma requisição específica.
+
+```bash
+curl -X POST https://api.parcelemais.com.br/integration/v1/order \
+  -H "Authorization: Bearer <token>" \
+  -H "CorrelationId: minha-app-req-48291" \
+  -H "Content-Type: application/json" \
+  -d '{ ... }'
+```
+
+## <Icon icon="repeat" type="solid"/> Reenvio seguro com Idempotency-Key
+
+Endpoints de criação (`POST`) aceitam o cabeçalho opcional `Idempotency-Key`. Ele permite reenviar a mesma operação com segurança após um timeout, erro de rede ou qualquer situação em que você não teve certeza se a requisição original foi processada.
+
+<Steps>
+  <Step title="Gere uma chave única por operação">
+    Antes de chamar a API, gere um identificador único (recomendamos um UUID) para aquela tentativa lógica de operação — por exemplo, uma venda específica que seu sistema está tentando criar.
+  </Step>
+  <Step title="Envie a chave no cabeçalho">
+    Inclua `Idempotency-Key: <sua-chave>` na requisição.
+  </Step>
+  <Step title="Reenvie com a mesma chave se precisar tentar novamente">
+    Se a chamada falhar por timeout ou erro de rede, repita a requisição com **a mesma chave e o mesmo corpo**. A API retorna a resposta da tentativa original, sem repetir a operação.
+  </Step>
+</Steps>
+
+<CardGroup cols={2}>
+  <Card title="Chave reutilizada com corpo diferente" icon="ban" color="#f44336">
+    Retorna `409 Conflict`. Uma mesma `Idempotency-Key` está atrelada ao corpo exato da primeira requisição.
+  </Card>
+  <Card title="Requisição concorrente em processamento" icon="clock" color="#f44336">
+    Se uma segunda requisição chegar com a mesma chave enquanto a primeira ainda está sendo processada, também retorna `409 Conflict`.
+  </Card>
+</CardGroup>
+
+<Note>
+  A resposta de uma `Idempotency-Key` fica disponível para reenvio por **24 horas**. Após esse período, uma nova requisição com a mesma chave é tratada como uma operação nova.
+</Note>
+
+Endpoints recomendados para uso de `Idempotency-Key`: `POST /v1/order`, `POST /v1/order/invoice` e `POST /v1/order/start-cdc-sale`.

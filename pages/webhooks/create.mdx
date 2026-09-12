@@ -28,3 +28,7 @@ Cria uma configuração de webhook para o parceiro identificado automaticamente 
 <Note>
   A credencial é obrigatória para Basic e JWT. Pode existir apenas um webhook de cada tipo por parceiro.
 </Note>
+
+## Chave de assinatura
+
+A resposta traz `chaveAssinatura`, usada para verificar a autenticidade das notificações recebidas. Ela é exibida **apenas nesta resposta** — guarde-a com segurança, pois não é possível consultá-la novamente. Consulte [Webhooks → Verificando a assinatura](/webhooks#verificando-a-assinatura).

@@ -29,7 +29,8 @@
               "pages/introduction",
               "pages/development",
               "pages/authentication",
-              "pages/test-cards"
+              "pages/test-cards",
+              "pages/errors"
             ]
           },
           {
