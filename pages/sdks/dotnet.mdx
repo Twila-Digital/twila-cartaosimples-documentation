@@ -12,10 +12,17 @@ O SDK oficial em .NET encapsula autenticação, renovação de token, política 
 
 ## Compatibilidade
 
-| Target Framework | Suporte |
+O pacote publica dois target frameworks: `netstandard2.0` e `net8.0` (build nativo, com as dependências mais recentes).
+
+| Runtime | Versões aceitas |
 | --- | --- |
-| .NET Standard 2.0 | ✅ (.NET Framework 4.6.2+, .NET Core 2.0+) |
-| .NET 8 | ✅ |
+| .NET / .NET Core | 2.0 até a versão mais recente (5, 6, 7, 8, 9, 10) — via `netstandard2.0` a partir de 2.0, nativamente a partir da 8 |
+| .NET Framework | 4.6.2 ou superior |
+| Xamarin / Mono / UWP | Qualquer versão compatível com .NET Standard 2.0 |
+
+<Warning>
+  **.NET Core 1.0 e 1.1 não são suportados** — essas versões só implementam .NET Standard 1.6, e o SDK exige .NET Standard 2.0.
+</Warning>
 
 ## Instalação
 

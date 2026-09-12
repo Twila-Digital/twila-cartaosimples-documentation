@@ -4,7 +4,13 @@ description: 'Visão técnica da API do Parcele+ — ambientes, autenticação, 
 icon: 'code'
 ---
 
-Se você chegou aqui vindo da página [para lojistas](/pages/for-merchants), esta é a visão técnica: como a API do Parcele+ funciona por baixo do capô.
+<Tip>
+  Esta seção é para quem vai **integrar tecnicamente**. Se você quer entender o produto antes de programar, veja [Para Lojistas](/pages/for-merchants).
+</Tip>
+
+## Em uma frase
+
+A API do Parcele+ é REST, autenticada por Bearer token, com campos JSON em português e o mesmo formato de resposta em toda a superfície — sem SDK, um cliente HTTP e um token já bastam para integrar.
 
 <Card title="Não é a página de referência de endpoints" icon="circle-info" horizontal>
   Esta página explica os conceitos que atravessam toda a API. Para o contrato de cada endpoint, use o menu **CDC**/**Webhooks** ou a [referência OpenAPI](/openapi.yaml).
@@ -23,8 +29,14 @@ O ambiente é determinado pela URL base que você chama — as credenciais (`Cli
 
 Toda requisição autenticada usa um Bearer token, obtido via `ClientId`/`ClientSecret` solicitados ao nosso suporte.
 
+```bash
+curl -X POST https://api.staging.parcelemais.com.br/integration/v1/authentication/accesstoken \
+  -H "Content-Type: application/json" \
+  -d '{ "clientId": "<client-id>", "clientSecret": "<client-secret>" }'
+```
+
 <Card title="Fluxo completo de autenticação" icon="key" href="/pages/authentication" horizontal>
-  Veja como gerar o token e as boas práticas de segurança.
+  Veja a resposta completa e as boas práticas de segurança.
 </Card>
 
 ## Formato das respostas
@@ -87,7 +99,7 @@ Endpoints de criação (`POST /v1/order`, `/v1/order/invoice`, `/v1/order/start-
   <Card title="Webhooks" icon="bell" href="/pages/webhooks">
     Notificações em tempo real sobre o pedido.
   </Card>
-  <Card title="SDK .NET" icon="microsoft" href="/pages/sdks/sdks">
+  <Card title="Conheça nossos SDKs" icon="boxes-stacked" href="/pages/sdks/sdks">
     Não lide com HTTP manualmente.
   </Card>
 </CardGroup>

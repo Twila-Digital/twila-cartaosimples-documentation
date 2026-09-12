@@ -1,65 +1,87 @@
 ---
 title: 'Para lojistas'
-description: 'O que é o Parcele+ e como ele ajuda seu negócio a vender mais'
+description: 'Entenda o que o Parcele+ faz pelo seu negócio — sem precisar ser desenvolvedor'
 icon: 'shop'
 ---
 
-Esta página é para quem toma decisões sobre o negócio — sem entrar em detalhes técnicos de integração. Se você é desenvolvedor, veja a [visão técnica](/pages/for-developers).
+<Tip>
+  Esta seção é para quem quer **entender o produto** antes de integrar. Se você já é desenvolvedor e quer ir direto ao código, vá para [Para Desenvolvedores](/pages/for-developers).
+</Tip>
 
 ## Em uma frase
 
-O Parcele+ permite que seus clientes parcelem uma compra usando crédito direto ao consumidor (CDC), sem comprometer o limite do cartão de crédito deles.
+O Parcele+ permite que seus clientes parcelem uma compra usando crédito direto ao consumidor (CDC) — uma linha de crédito específica para aquela venda, separada do limite do cartão.
+
+---
 
 ## O problema que o Parcele+ resolve
 
-Muitos clientes têm o limite do cartão de crédito ocupado ou preferem não usá-lo para compras maiores. Sem uma alternativa de parcelamento, essa venda simplesmente não acontece.
+Muitos clientes têm o limite do cartão de crédito ocupado, baixo, ou preferem não usá-lo para uma compra maior. Sem uma alternativa de parcelamento, essa venda simplesmente não acontece — o cliente desiste ou procura outro lugar.
 
-O Parcele+ oferece uma linha de crédito separada, específica para a compra, aprovada em poucos minutos — o cliente parcela, e você recebe.
+Para oferecer crédito por conta própria, você precisaria:
+
+- Fazer análise de crédito e assumir o risco de inadimplência
+- Lidar com burocracia de originação de crédito
+- Cobrar as parcelas dos seus clientes mês a mês
+
+O Parcele+ cuida de tudo isso por você. Você vende; a gente analisa, aprova e cobra.
+
+---
 
 ## O que isso significa para o seu negócio
 
 <CardGroup cols={2}>
-  <Card title="Mais vendas aprovadas" icon="chart-line">
-    Clientes que não conseguiriam fechar a compra no cartão ganham uma segunda opção de pagamento.
+  <Card icon="chart-line" title="Mais vendas aprovadas">
+    Clientes que não conseguiriam fechar a compra no cartão ganham uma segunda opção de pagamento, no mesmo momento da venda.
   </Card>
-  <Card title="Sem risco de inadimplência para você" icon="shield-halved">
+
+  <Card icon="shield-halved" title="Sem risco de inadimplência para você">
     A análise de crédito e a cobrança das parcelas são responsabilidade do Parcele+, não da sua loja.
   </Card>
-  <Card title="Processo rápido" icon="bolt">
-    A análise de crédito acontece em minutos, direto no momento da venda.
+
+  <Card icon="bolt" title="Aprovação em minutos">
+    A análise de crédito acontece automaticamente, direto no momento da venda — sem espera.
   </Card>
-  <Card title="Você acompanha cada pedido" icon="bell">
+
+  <Card icon="bell" title="Acompanhamento em tempo real">
     Notificações automáticas avisam quando o pedido é aprovado, recusado ou desembolsado.
   </Card>
 </CardGroup>
 
-## Como funciona, na prática
+---
 
-<Steps>
-  <Step title="O cliente escolhe parcelar no Parcele+">
-    No momento da compra, seu sistema envia os dados do cliente e o valor da venda.
-  </Step>
-  <Step title="Análise de crédito automática">
-    O Parcele+ analisa e aprova (ou recusa) o crédito para aquela compra específica.
-  </Step>
-  <Step title="Cliente confirma o pagamento">
-    Se aprovado, o cliente é direcionado para confirmar os dados e as condições da compra.
-  </Step>
-  <Step title="Você recebe, o cliente parcela">
-    O valor da venda é desembolsado para você; o cliente paga as parcelas diretamente ao Parcele+.
-  </Step>
-</Steps>
+## Como funciona o fluxo de uma venda
+
+```
+Seu cliente → Análise automática de crédito → Cliente confirma → Você recebe, o cliente parcela
+```
+
+1. No momento da compra, seu sistema envia os dados do cliente e o valor da venda ao Parcele+
+2. O Parcele+ analisa e aprova (ou recusa) o crédito para aquela compra específica
+3. Se aprovado, o cliente confirma os dados e as condições da compra
+4. O valor da venda é desembolsado para você; o cliente paga as parcelas diretamente ao Parcele+
+
+---
+
+## Quem usa o Parcele+?
+
+- Lojas físicas e e-commerces que vendem produtos de ticket mais alto
+- Negócios que perdem vendas por limite de cartão insuficiente do cliente
+- Marketplaces e plataformas que querem oferecer crédito no checkout dos seus lojistas
+
+---
 
 ## Como sua loja se conecta ao Parcele+
 
 A integração é técnica — feita pelo time de desenvolvimento da sua loja, do seu marketplace ou do seu parceiro de tecnologia, usando nossa API ou o [SDK oficial](/pages/sdks/sdks).
 
-<Card title="Já tem um time técnico?" icon="code" href="/pages/for-developers" horizontal>
-  Encaminhe a [visão técnica](/pages/for-developers) para quem vai fazer a integração.
-</Card>
-
 ## Próximos passos
 
-<Card title="Falar com o time Parcele+" icon="envelope" horizontal color="#25c2a0">
-  Para solicitar suas credenciais de acesso ou tirar dúvidas sobre o produto, entre em contato pelo e-mail <Icon icon="envelope" type="solid"/> atendimento@parcelemais.com.br
-</Card>
+<CardGroup cols={2}>
+  <Card icon="envelope" title="Falar com o time Parcele+" href="mailto:atendimento@parcelemais.com.br">
+    Para solicitar suas credenciais de acesso ou tirar dúvidas sobre o produto.
+  </Card>
+  <Card icon="code" title="Já tem um time técnico?" href="/pages/for-developers">
+    Encaminhe a visão técnica para quem vai fazer a integração.
+  </Card>
+</CardGroup>
