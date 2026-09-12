@@ -12,7 +12,7 @@ Publicado em produção a partir da branch `production`.
 
 ## Para IAs e agentes
 
-O índice completo da documentação está disponível em [`/llms.txt`](https://docs.parcelemais.com.br/llms.txt). Qualquer página também pode ser lida como Markdown puro trocando a extensão da URL para `.md`.
+O índice completo da documentação está disponível em [`/llms.txt`](https://documentacao.parcelemais.com.br/llms.txt). Qualquer página também pode ser lida como Markdown puro trocando a extensão da URL para `.md`.
 
 ## SDKs
 
