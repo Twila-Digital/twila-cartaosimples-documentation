@@ -12,6 +12,9 @@
   },
   "openapi": ["/openapi.yaml"],
   "favicon": "/favicon.svg",
+  "contextual": {
+    "options": ["copy", "view", "chatgpt", "claude", "mcp"]
+  },
   "redirects": [
     {
       "source": "/",
@@ -89,6 +92,15 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "SDKs",
+        "groups": [
+          {
+            "group": "Oficiais",
+            "pages": ["pages/sdks/dotnet"]
+          }
+        ]
       }
     ]
   },
@@ -97,6 +109,13 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
+    "links": [
+      {
+        "label": "GitHub",
+        "icon": "github",
+        "href": "https://github.com/Twila-Digital/twila-parcelemais-dotnet-sdk"
+      }
+    ],
     "primary": {
       "type": "button",
       "label": "Parcele +",
@@ -105,7 +124,7 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/Twila-Digital",
+      "github": "https://github.com/Twila-Digital/twila-cartaosimples-documentation",
       "linkedin": "https://www.linkedin.com/company/twila-tecnologia"
     }
   }

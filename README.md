@@ -1,55 +1,49 @@
-# Mintlify Starter Kit
+# Documentação do Parcele +
 
-Use the starter kit to get your docs deployed and ready to customize.
+Site de documentação da API do [Parcele +](https://www.cartaosimples.com.br), construído com [Mintlify](https://mintlify.com).
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+Publicado em produção a partir da branch `production`.
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+## Estrutura
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+- `docs.json` — navegação, tema e configuração do site
+- `openapi.yaml` — especificação OpenAPI da API de integração, usada para gerar as páginas de referência
+- `pages/` — conteúdo das páginas (MDX)
 
-## AI-assisted writing
+## Para IAs e agentes
 
-Set up your AI coding tool to work with Mintlify:
+O índice completo da documentação está disponível em [`/llms.txt`](https://docs.parcelemais.com.br/llms.txt). Qualquer página também pode ser lida como Markdown puro trocando a extensão da URL para `.md`.
+
+## SDKs
+
+- [.NET](https://github.com/Twila-Digital/twila-parcelemais-dotnet-sdk)
+
+## Desenvolvimento local
+
+Instale a CLI da Mintlify:
 
 ```bash
-npx skills add https://mintlify.com/docs
-```
-
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
-
-See the [AI tools guides](/ai-tools) for tool-specific setup.
-
-## Development
-
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
 npm i -g mint
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+Na raiz deste repositório (onde está o `docs.json`):
 
-```
+```bash
 mint dev
 ```
 
-View your local preview at `http://localhost:3000`.
+Acesse `http://localhost:3000`.
 
-## Publishing changes
+Para validar links quebrados:
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+```bash
+mint broken-links
+```
 
-## Need help?
+## Publicação
 
-### Troubleshooting
+Alterações na branch `production` são publicadas automaticamente via o GitHub App da Mintlify.
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+## Contribuindo
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+Veja [CONTRIBUTING.md](CONTRIBUTING.md).

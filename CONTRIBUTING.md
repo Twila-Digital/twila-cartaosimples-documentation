@@ -1,34 +1,26 @@
-> **Customize this file**: Tailor this template to your project by noting specific contribution types you're looking for, adding a Code of Conduct, or adjusting the writing guidelines to match your style.
+# Contribuindo com a documentação
 
-# Contribute to the documentation
+## Como contribuir
 
-Thank you for your interest in contributing to our documentation! This guide will help you get started.
+### Opção 1: editar direto no GitHub
 
-## How to contribute
+1. Navegue até a página que quer editar
+2. Clique no ícone de lápis ("Edit this file")
+3. Faça as alterações e abra um pull request
 
-### Option 1: Edit directly on GitHub
+### Opção 2: desenvolvimento local
 
-1. Navigate to the page you want to edit
-2. Click the "Edit this file" button (the pencil icon)
-3. Make your changes and submit a pull request
+1. Clone este repositório e crie uma branch
+2. Instale a CLI da Mintlify: `npm i -g mint`
+3. Rode `mint dev` na raiz do repositório e pré-visualize em `http://localhost:3000`
+4. Rode `mint broken-links` antes de abrir o PR
+5. Abra um pull request para `production`
 
-### Option 2: Local development
+## Diretrizes de escrita
 
-1. Fork and clone this repository
-2. Install the Mintlify CLI: `npm i -g mint`
-3. Create a branch for your changes
-4. Make changes
-5. Navigate to the docs directory and run `mint dev`
-6. Preview your changes at `http://localhost:3000`
-7. Commit your changes and submit a pull request
-
-For more details on local development, see our [development guide](development.mdx).
-
-## Writing guidelines
-
-- **Use active voice**: "Run the command" not "The command should be run"
-- **Address the reader directly**: Use "you" instead of "the user"
-- **Keep sentences concise**: Aim for one idea per sentence
-- **Lead with the goal**: Start instructions with what the user wants to accomplish
-- **Use consistent terminology**: Don't alternate between synonyms for the same concept
-- **Include examples**: Show, don't just tell
+- Use voz ativa e se dirija ao leitor na segunda pessoa ("você")
+- Frases curtas — uma ideia por frase
+- Comece pelo objetivo do leitor, não pela implementação
+- Use sempre o mesmo termo para o mesmo conceito (veja [AGENTS.md](AGENTS.md#terminologia))
+- Prefira exemplos de código a apenas descrever o comportamento
+- Páginas de referência de endpoint (`openapi: "..."` no front-matter) não devem duplicar descrição/parâmetros — isso vem de `openapi.yaml`
