@@ -48,11 +48,21 @@
             "group": "Integração",
             "pages": [
               "pages/for-developers",
-              "pages/authentication",
-              "pages/authentication/access-token",
               "pages/development",
               "pages/test-cards",
               "pages/errors"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Autenticação",
+        "groups": [
+          {
+            "group": "Autenticação",
+            "pages": [
+              "pages/authentication",
+              "pages/authentication/access-token"
             ]
           }
         ]
