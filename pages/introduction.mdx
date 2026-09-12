@@ -1,71 +1,207 @@
 ---
-title: Comece aqui
-icon: 'credit-card'
-description: "Pegue seu café ☕ e venha entender como integrar com o Parcele+."
+title: "Comece aqui"
+mode: "custom"
 ---
 
-Nesta documentação, você encontrará tudo o que precisa para começar a utilizar nossa API de forma simples, rápida e sem complicações.
+<div style={{
+    position: "relative",
+    textAlign: "center",
+    padding: "80px 20px",
+    background: "linear-gradient(135deg, #1A15B8 0%, #3A36F5 60%, #555EFF 100%)",
+    borderBottom: "1px solid rgba(255,255,255,0.08)"
+}}>
+  <h1 style={{ fontSize: "40px", fontWeight: "600", marginBottom: "16px", color: "#fff" }}>
+    Bem-vindo ao Parcele+
+  </h1>
+  <p style={{
+    maxWidth: "800px",
+    margin: "0 auto",
+    opacity: 0.85,
+    fontSize: "18px",
+    fontWeight: "300",
+    color: "#fff"
+  }}>
+    Ofereça crédito e parcelamento no momento da compra, sem comprometer o limite do cartão.<br />
+    Seja você lojista ou desenvolvedor, encontre aqui o que precisa.
+  </p>
+</div>
 
-## <Icon icon="credit-card" type="solid"/>  O que é o Parcele+?
+<div style={{
+  padding: "48px 20px 24px",
+  maxWidth: "900px",
+  margin: "0 auto",
+  borderBottom: "1px solid rgba(0,0,0,0.06)"
+}}>
+  <h2 style={{ fontSize: "20px", fontWeight: "600", marginBottom: "8px", textAlign: "center" }}>
+    Por onde você quer começar?
+  </h2>
+  <p style={{ opacity: 0.6, marginBottom: "28px", textAlign: "center", fontSize: "14px" }}>
+    Escolha o caminho que faz mais sentido para você agora.
+  </p>
 
-O Parcele+ é uma solução de pagamento que permite oferecer crédito e parcelamento no momento da compra, de forma prática e integrada, sem comprometer o limite do cartão de crédito.
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+    gap: "16px"
+  }}>
+    <a href="/pages/for-merchants" style={{ textDecoration: "none", display: "flex", height: "100%" }}>
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        padding: "28px",
+        borderRadius: "12px",
+        border: "1px solid rgba(0,0,0,0.1)",
+        background: "rgba(58, 54, 245, 0.03)",
+        cursor: "pointer"
+      }}>
+        <div style={{ fontSize: "28px", marginBottom: "12px" }}>🏪</div>
+        <div style={{ fontSize: "17px", fontWeight: "700", marginBottom: "8px" }}>
+          Sou lojista / empreendedor
+        </div>
+        <div style={{ fontSize: "14px", opacity: 0.7, lineHeight: "1.6" }}>
+          Quero entender o produto e como ele ajuda meu negócio a vender mais — sem entrar em detalhes técnicos.
+        </div>
+        <div style={{ marginTop: "auto", paddingTop: "16px", fontSize: "13px", color: "#3A36F5", fontWeight: "600" }}>
+          Começar por aqui →
+        </div>
+      </div>
+    </a>
 
-Com ele, seus usuários ganham mais flexibilidade para pagar, enquanto você aumenta suas chances de conversão com uma experiência mais fluida.
+    <a href="/pages/for-developers" style={{ textDecoration: "none", display: "flex", height: "100%" }}>
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        width: "100%",
+        padding: "28px",
+        borderRadius: "12px",
+        border: "2px solid #3A36F5",
+        background: "rgba(58, 54, 245, 0.06)",
+        cursor: "pointer"
+      }}>
+        <div style={{ fontSize: "28px", marginBottom: "12px" }}>💻</div>
+        <div style={{ fontSize: "17px", fontWeight: "700", color: "#3A36F5", marginBottom: "8px" }}>
+          Sou desenvolvedor
+        </div>
+        <div style={{ fontSize: "14px", opacity: 0.7, lineHeight: "1.6" }}>
+          Quero integrar a API, configurar webhooks e usar o SDK para automatizar pedidos no meu sistema.
+        </div>
+        <div style={{ marginTop: "auto", paddingTop: "16px", fontSize: "13px", color: "#3A36F5", fontWeight: "600" }}>
+          Ver documentação técnica →
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
 
-Nossa missão é simplificar o acesso ao crédito, transformando processos complexos em uma integração leve, eficiente e intuitiva.
+<div style={{
+  padding: "60px 20px",
+  maxWidth: "1100px",
+  margin: "0 auto",
+  borderBottom: "1px solid rgba(0,0,0,0.06)"
+}}>
+  <h2 style={{ fontSize: "22px", fontWeight: "600", marginBottom: "12px" }}>
+    O que é o Parcele+?
+  </h2>
+  <p style={{ opacity: 0.75, marginBottom: "24px", lineHeight: "1.7" }}>
+    O Parcele+ é uma solução de pagamento que permite oferecer crédito direto ao consumidor (CDC) e parcelamento no momento da compra, de forma prática e integrada, sem comprometer o limite do cartão de crédito. Seus clientes ganham mais flexibilidade para pagar, e você aumenta suas chances de conversão com uma experiência mais fluida.
+  </p>
 
-## Por onde você quer começar?
+  ```csharp
+  var pedidoId = await client.Orders.CreateAsync(new CreateOrderRequest(...));
+  ```
 
-<CardGroup cols={2}>
-  <Card title="Sou lojista / empreendedor" icon="shop" href="/pages/for-merchants">
-    Quero entender o produto e como ele ajuda meu negócio a vender mais — sem entrar em detalhes técnicos.
-  </Card>
-  <Card title="Sou desenvolvedor" icon="code" href="/pages/for-developers">
-    Quero a visão técnica: ambientes, autenticação, formato de respostas e erros.
-  </Card>
-</CardGroup>
+  <div style={{ marginTop: "32px" }}>
+    <h3 style={{ fontSize: "18px", fontWeight: "600", marginBottom: "16px" }}>
+      Princípios da API
+    </h3>
+    <div style={{
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+      gap: "16px"
+    }}>
+      <Card title="Campos em português" icon="language" horizontal>
+        Nomes de campos e endpoints refletem exatamente a ação — `POST /v1/order` cria um pedido, sem tradução mental.
+      </Card>
+      <Card title="Respostas consistentes" icon="check-double" horizontal>
+        Toda lista paginada segue o mesmo formato: `itens` + `pagina`. Todo erro segue RFC 7807.
+      </Card>
+    </div>
+  </div>
+</div>
 
-## O que você pode fazer
+<div style={{
+  padding: "60px 20px",
+  maxWidth: "1100px",
+  margin: "0 auto"
+}}>
+  <h2 style={{ fontSize: "22px", fontWeight: "600", marginBottom: "24px" }}>
+    O que você pode fazer
+  </h2>
 
-<CardGroup cols={2}>
-  <Card title="Venda CDC" icon="arrow-right-arrow-left" href="/pages/flow">
-    Siga o fluxo completo de uma venda com crédito direto ao consumidor, do token de acesso ao checkout.
-  </Card>
-  <Card title="Simular parcelas" icon="calculator" href="/pages/orders/simulate-installments">
-    Calcule as opções de parcelamento antes de criar o pedido.
-  </Card>
-  <Card title="Criar pedido" icon="id-card" href="/pages/orders/validate-cdc-customer">
-    Registre o pedido com os dados do cliente e inicie a venda.
-  </Card>
-  <Card title="Webhooks" icon="bell" href="/pages/webhooks">
-    Receba notificações em tempo real sobre o andamento dos pedidos.
-  </Card>
-</CardGroup>
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+    gap: "24px",
+    marginBottom: "48px"
+  }}>
+    <Card icon="arrow-right-arrow-left" title="Venda CDC" href="/pages/flow">
+      Siga o fluxo completo de uma venda com crédito direto ao consumidor, do token de acesso ao checkout.
+    </Card>
+    <Card icon="calculator" title="Simular parcelas" href="/pages/orders/simulate-installments">
+      Calcule as opções de parcelamento antes de criar o pedido.
+    </Card>
+    <Card icon="id-card" title="Criar pedido" href="/pages/orders/validate-cdc-customer">
+      Registre o pedido com os dados do cliente e inicie a venda.
+    </Card>
+    <Card icon="bell" title="Webhooks" href="/pages/webhooks">
+      Receba notificações em tempo real sobre o andamento dos pedidos.
+    </Card>
+  </div>
 
-## Primeiros passos
+  <h2 style={{ fontSize: "22px", fontWeight: "600", marginBottom: "24px" }}>
+    Primeiros passos
+  </h2>
 
-<CardGroup cols={2}>
-  <Card title="Gerar token de acesso" icon="key" href="/pages/authentication">
-    Autentique-se com seu Client ID e Client Secret.
-  </Card>
-  <Card title="Ambiente de desenvolvimento" icon="flask" href="/pages/development">
-    Teste sua integração em staging, sem afetar produção.
-  </Card>
-  <Card title="Cartões de teste" icon="credit-card" href="/pages/test-cards">
-    Simule transações aprovadas e rejeitadas.
-  </Card>
-  <Card title="SDK .NET" icon="microsoft" href="/pages/sdks/sdks">
-    Use nosso SDK oficial em vez de chamar a API manualmente.
-  </Card>
-</CardGroup>
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+    gap: "24px"
+  }}>
+    <Card icon="key" title="Gerar token de acesso" href="/pages/authentication">
+      Autentique-se com seu Client ID e Client Secret.
+    </Card>
+    <Card icon="flask" title="Ambiente de desenvolvimento" href="/pages/development">
+      Teste sua integração em staging, sem afetar produção.
+    </Card>
+    <Card icon="credit-card" title="Cartões de teste" href="/pages/test-cards">
+      Simule transações aprovadas e rejeitadas.
+    </Card>
+    <Card icon="microsoft" title="SDK .NET" href="/pages/sdks/sdks">
+      Use nosso SDK oficial em vez de chamar a API manualmente.
+    </Card>
+  </div>
+</div>
 
-<Note>
-  Você é um agente de IA? Busque o índice completo desta documentação em [`/llms.txt`](/llms.txt) — ou peça a versão em Markdown de qualquer página trocando a extensão para `.md` na URL.
-</Note>
+<div style={{
+  padding: "60px 20px",
+  maxWidth: "1100px",
+  margin: "0 auto"
+}}>
+  <h2 style={{ fontSize: "28px", fontWeight: "600", marginBottom: "32px" }}>
+    Precisa de ajuda?
+  </h2>
 
-## <Icon icon="cloud" type="solid"/>  Precisa de ajuda?
-
-Se surgir qualquer dúvida durante a integração, nosso time está pronto para ajudar você.
-
-Entre em contato pelo e-mail:
-<Icon icon="envelope" type="solid"/> atendimento@parcelemais.com.br
+  <div style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+    gap: "24px"
+  }}>
+    <Card icon="envelope" title="Fale com o time Parcele+" href="mailto:atendimento@parcelemais.com.br">
+      atendimento@parcelemais.com.br — para credenciais e dúvidas sobre o produto.
+    </Card>
+    <Card icon="robot" title="Você é um agente de IA?" href="/llms.txt">
+      Busque o índice completo desta documentação em `/llms.txt`, ou peça a versão em Markdown de qualquer página trocando a extensão para `.md`.
+    </Card>
+  </div>
+</div>

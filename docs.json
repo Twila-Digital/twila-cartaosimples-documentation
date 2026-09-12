@@ -24,23 +24,36 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Documentação",
+        "tab": "Comece aqui",
         "groups": [
           {
-            "group": "Introdução",
+            "group": "Comece aqui",
+            "pages": ["pages/introduction"]
+          }
+        ]
+      },
+      {
+        "tab": "Para Lojistas",
+        "groups": [
+          {
+            "group": "Entenda o produto",
+            "pages": ["pages/for-merchants"]
+          }
+        ]
+      },
+      {
+        "tab": "Guias",
+        "groups": [
+          {
+            "group": "Integração",
             "pages": [
-              "pages/introduction",
-              "pages/for-merchants",
               "pages/for-developers",
-              "pages/development",
               "pages/authentication",
+              "pages/authentication/access-token",
+              "pages/development",
               "pages/test-cards",
               "pages/errors"
             ]
-          },
-          {
-            "group": "Autenticação",
-            "pages": ["pages/authentication/access-token"]
           }
         ]
       },
