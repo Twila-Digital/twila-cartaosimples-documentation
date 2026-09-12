@@ -83,7 +83,7 @@
             "group": "Webhooks",
             "pages": [
               "pages/webhooks/create",
-              "pages/webhooks/paged",
+              "pages/webhooks/list",
               "pages/webhooks/update",
               "pages/webhooks/delete"
             ]
