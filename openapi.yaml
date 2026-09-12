@@ -661,49 +661,26 @@ paths:
           description: Já existe um webhook cadastrado para o tipo informado.
         "500":
           description: Internal Server Error
-  /v1/webhooks/paged:
     get:
-      operationId: pagedWebHooks
+      operationId: listWebHooks
       tags:
         - Webhook
       summary: Listar webhooks.
-      description: Retorna os webhooks cadastrados pelo parceiro. As credenciais de autenticação nunca são retornadas. Configurações de Cliente e Simulação podem aparecer na lista, embora esses fluxos ainda não realizem disparos.
-      parameters:
-        - name: pagina
-          in: query
-          description: "Número da página. Padrão: 1."
-          schema:
-            type: integer
-            minimum: 1
-            default: 1
-        - name: tamanhoPagina
-          in: query
-          description: "Quantidade de itens por página. Padrão: 10. Máximo: 100."
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 100
-            default: 10
+      description: |
+        Retorna os webhooks cadastrados pelo parceiro, como uma lista simples (sem paginação — um parceiro tem no máximo 3 webhooks, um por tipo: Cliente, Simulação, Pedido). As credenciais de autenticação nunca são retornadas. Configurações de Cliente e Simulação podem aparecer na lista, embora esses fluxos ainda não realizem disparos.
       responses:
         "200":
           description: Webhooks retornados com sucesso.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PagedWebHookIntegrationResponse"
-              example:
+                type: array
                 items:
-                  - tipo: 3
-                    url: "https://parceiro.exemplo.com/webhooks/pedidos"
-                    tipoAutenticacao: 3
-                pagina:
-                  tem_proximo: false
-                  tem_anterior: false
-                  numero: 1
-                  tamanho: 10
-                  total: 1
-        "400":
-          description: Parâmetros de paginação inválidos.
+                  $ref: "#/components/schemas/WebHookIntegrationResponse"
+              example:
+                - tipo: 3
+                  url: "https://parceiro.exemplo.com/webhooks/pedidos"
+                  tipoAutenticacao: 3
         "404":
           description: Parceiro não encontrado.
         "500":
@@ -861,33 +838,6 @@ components:
           format: int32
           enum: [1, 2, 3]
           description: "1: Nenhuma; 2: Basic; 3: JWT."
-      additionalProperties: false
-    PagedWebHookIntegrationResponse:
-      type: object
-      properties:
-        items:
-          type: array
-          items:
-            $ref: "#/components/schemas/WebHookIntegrationResponse"
-        pagina:
-          $ref: "#/components/schemas/PaginationIntegrationResponse"
-      additionalProperties: false
-    PaginationIntegrationResponse:
-      type: object
-      properties:
-        tem_proximo:
-          type: boolean
-        tem_anterior:
-          type: boolean
-        numero:
-          type: integer
-          format: int32
-        tamanho:
-          type: integer
-          format: int32
-        total:
-          type: integer
-          format: int32
       additionalProperties: false
     Integration.Shared.Responses.Order.ListSimulateInstallmentsSimplifiedIntegrationResponse:
       type: object
