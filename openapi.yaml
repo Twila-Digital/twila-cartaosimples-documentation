@@ -460,7 +460,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Core.Domain.Primitives.IPagedResult_OrderIntegrationResponse"
               example:
-                items:
+                itens:
                   - id: "3c90c3cc-0d44-4b50-8888-8dd25736052a"
                     numero: 1001
                     status:
@@ -592,7 +592,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Core.Domain.Primitives.IPagedResult_CustomerIntegrationResponse"
               example:
-                items:
+                itens:
                   - id: "9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d"
                     nome: "Maria Souza"
                     documento: "98765432100"
@@ -903,7 +903,7 @@ components:
     Core.Domain.Primitives.IPagedResult_CustomerIntegrationResponse:
       type: object
       properties:
-        items:
+        itens:
           type: array
           items:
             $ref: "#/components/schemas/Integration.Shared.Responses.Customer.CustomerIntegrationResponse"
@@ -914,7 +914,7 @@ components:
     Core.Domain.Primitives.IPagedResult_OrderIntegrationResponse:
       type: object
       properties:
-        items:
+        itens:
           type: array
           items:
             $ref: "#/components/schemas/Integration.Shared.Responses.Order.OrderIntegrationResponse"
