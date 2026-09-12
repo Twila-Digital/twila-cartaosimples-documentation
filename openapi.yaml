@@ -843,7 +843,7 @@ components:
           description: |
             Chave secreta usada para assinar (HMAC-SHA256) as notificações enviadas a este webhook. É exibida apenas nesta resposta — guarde-a com segurança, pois não é possível consultá-la novamente.
 
-            Consulte [Webhooks → Verificando a assinatura](/webhooks#verificando-a-assinatura) para o algoritmo de verificação.
+            Consulte [Webhooks → Verificando a assinatura](/pages/webhooks#verificando-a-assinatura) para o algoritmo de verificação.
       additionalProperties: false
     WebHookIntegrationResponse:
       type: object
@@ -1049,7 +1049,7 @@ components:
     Integration.Shared.Responses.Order.OrderStatus:
       type: object
       description: |
-        Status do pedido. Consulte os valores enviados em [Webhooks → Status enviados pelo webhook](/webhooks#status-enviados-pelo-webhook).
+        Status do pedido. Consulte os valores enviados em [Webhooks → Status enviados pelo webhook](/pages/webhooks#status-enviados-pelo-webhook).
       properties:
         valor:
           type: integer
