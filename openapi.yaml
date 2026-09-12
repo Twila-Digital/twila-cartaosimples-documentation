@@ -4,6 +4,8 @@ info:
   description: Este documento descreve os endpoints disponíveis da API.
   version: "1.0"
 servers:
+  - url: https://api.parcelemais.com.br/integration
+    description: Servidor para o ambiente de produção
   - url: https://api.staging.parcelemais.com.br/integration
     description: Servidor para o ambiente de staging
 paths:
@@ -143,6 +145,9 @@ paths:
         - Pedido
       summary: Iniciar venda CDC.
       description: Inicia o processo de venda de um pedido CDC.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/CorrelationId"
       requestBody:
         content:
           application/json:
@@ -163,6 +168,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "409":
+          description: Conflito de `Idempotency-Key` — a chave já foi usada com um corpo de requisição diferente, ou uma requisição com a mesma chave ainda está em processamento.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
   /v1/order:
@@ -172,6 +183,9 @@ paths:
         - Pedido
       summary: Criar pedido.
       description: Cria um novo pedido CDC com os dados do cliente e as informações da venda.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/CorrelationId"
       requestBody:
         content:
           application/json:
@@ -208,6 +222,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "409":
+          description: Conflito de `Idempotency-Key` — a chave já foi usada com um corpo de requisição diferente, ou uma requisição com a mesma chave ainda está em processamento.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
         "500":
           description: Internal Server Error
   /v1/order/invoice:
@@ -217,6 +237,9 @@ paths:
         - Pedido
       summary: Importar nota fiscal.
       description: Importa a nota fiscal de um pedido CDC a partir de um arquivo em base64.
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - $ref: "#/components/parameters/CorrelationId"
       requestBody:
         required: true
         content:
@@ -232,6 +255,12 @@ paths:
           description: Nota fiscal importada com sucesso.
         "400":
           description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Microsoft.AspNetCore.Mvc.ProblemDetails"
+        "409":
+          description: Conflito de `Idempotency-Key` — a chave já foi usada com um corpo de requisição diferente, ou uma requisição com a mesma chave ainda está em processamento.
           content:
             application/json:
               schema:
@@ -614,6 +643,12 @@ paths:
       responses:
         "200":
           description: Webhook criado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateWebHookResponse"
+              example:
+                chaveAssinatura: "3f2e1a9c8b7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1f"
         "400":
           description: Dados inválidos.
           content:
@@ -720,6 +755,31 @@ paths:
           description: Internal Server Error
 components:
   parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      description: |
+        Chave de idempotência para requisições de criação/alteração (`POST`). Recomendada para `/v1/order`, `/v1/order/invoice` e `/v1/order/start-cdc-sale`.
+
+        Use um identificador único por tentativa lógica de operação (ex.: um UUID gerado pelo seu sistema antes de chamar a API). Reenviar a mesma chave com o mesmo corpo de requisição, dentro de 24 horas, retorna a resposta original em vez de repetir a operação — útil para reintentar com segurança após timeout ou erro de rede.
+
+        Reenviar a mesma chave com um corpo de requisição diferente retorna `409 Conflict`. Uma segunda requisição com a mesma chave enquanto a primeira ainda está em processamento também retorna `409 Conflict`.
+      schema:
+        type: string
+        format: uuid
+      example: "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+    CorrelationId:
+      name: CorrelationId
+      in: header
+      required: false
+      description: |
+        Identificador de correlação da requisição, usado para rastreamento em logs e suporte. Se não for enviado, a API gera um novo automaticamente.
+
+        O valor é sempre devolvido no cabeçalho de resposta `CorrelationId` e também no campo `correlationId` do corpo, em respostas de erro (`ProblemDetails`).
+      schema:
+        type: string
+      example: "0HN7E4B8Q9K3D:00000001"
     WebHookType:
       name: tipo
       in: path
@@ -774,6 +834,16 @@ components:
           type: string
           nullable: true
           description: Quando omitida, mantém a credencial atual. É removida quando o tipo de autenticação é Nenhuma.
+      additionalProperties: false
+    CreateWebHookResponse:
+      type: object
+      properties:
+        chaveAssinatura:
+          type: string
+          description: |
+            Chave secreta usada para assinar (HMAC-SHA256) as notificações enviadas a este webhook. É exibida apenas nesta resposta — guarde-a com segurança, pois não é possível consultá-la novamente.
+
+            Consulte [Webhooks → Verificando a assinatura](/webhooks#verificando-a-assinatura) para o algoritmo de verificação.
       additionalProperties: false
     WebHookIntegrationResponse:
       type: object
@@ -1056,12 +1126,27 @@ components:
         instancia:
           type: string
           nullable: true
+        erros:
+          type: object
+          nullable: true
+          description: Detalhamento por campo, presente quando o erro é de validação de payload. Ausente (`null`) para erros de regra de negócio, que trazem a explicação apenas em `detalhe`.
+          additionalProperties:
+            type: array
+            items:
+              type: string
+        correlationId:
+          type: string
+          nullable: true
+          description: Identificador de correlação da requisição (ver cabeçalho `CorrelationId`), útil para localizar logs ao abrir um chamado de suporte.
       example:
         tipo: "https://tools.ietf.org/html/rfc7231#section-6.5.1"
         titulo: "Requisição inválida."
         status: 400
         detalhe: "O campo 'cpf' é obrigatório."
         instancia: "/v1/order"
+        erros:
+          cpf: ["O campo 'cpf' é obrigatório."]
+        correlationId: "0HN7E4B8Q9K3D:00000001"
     Payment.Shared.Responses.LinkPaymentResponse:
       type: object
       properties:
