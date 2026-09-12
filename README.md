@@ -1,6 +1,6 @@
-# Documentação do Parcele +
+# Documentação do Parcele+
 
-Site de documentação da API do [Parcele +](https://www.cartaosimples.com.br), construído com [Mintlify](https://mintlify.com).
+Site de documentação da API do [Parcele+](https://www.cartaosimples.com.br), construído com [Mintlify](https://mintlify.com).
 
 Publicado em produção a partir da branch `production`.
 

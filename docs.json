@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Parcele +",
+  "name": "Parcele+",
   "colors": {
     "primary": "#3A36F5",
     "light": "#555EFF",
@@ -13,7 +13,7 @@
   "openapi": ["/openapi.yaml"],
   "favicon": "/favicon.svg",
   "contextual": {
-    "options": ["copy", "view", "chatgpt", "claude", "mcp"]
+    "options": ["copy", "view", "chatgpt", "claude"]
   },
   "redirects": [
     {
@@ -98,7 +98,7 @@
         "groups": [
           {
             "group": "Oficiais",
-            "pages": ["pages/sdks/dotnet"]
+            "pages": ["pages/sdks/sdks", "pages/sdks/dotnet"]
           }
         ]
       }
@@ -118,7 +118,7 @@
     ],
     "primary": {
       "type": "button",
-      "label": "Parcele +",
+      "label": "Parcele+",
       "href": "https://www.cartaosimples.com.br"
     }
   },

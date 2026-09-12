@@ -2,7 +2,7 @@
 
 ## Sobre este projeto
 
-- Documentação da API de integração do Parcele + (crédito e parcelamento no momento da compra), construída em [Mintlify](https://mintlify.com)
+- Documentação da API de integração do Parcele+ (crédito e parcelamento no momento da compra), construída em [Mintlify](https://mintlify.com)
 - Páginas são arquivos MDX com front-matter YAML
 - Configuração de navegação em `docs.json`
 - Páginas de referência de endpoints usam `openapi:` no front-matter e puxam descrição/parâmetros de `openapi.yaml` — não duplique essa informação manualmente na página
@@ -10,7 +10,7 @@
 
 ## Terminologia
 
-- "Parcele +" (com espaço antes do `+`), não "Parcele+" ou "ParceleMais" em texto visível para o leitor — "ParceleMais" é usado apenas em identificadores técnicos (nome do SDK, `PackageId`, etc.)
+- "Parcele+" (sem espaço antes do `+`), não "Parcele +" ou "ParceleMais" em texto visível para o leitor — "ParceleMais" é usado apenas em identificadores técnicos (nome do SDK, `PackageId`, etc.)
 - "pedido", não "compra" ou "transação"
 - "parceiro", não "cliente da API" ou "merchant" — "cliente" é reservado para o cliente final do parceiro (`Customer`)
 - "CDC" (crédito direto ao consumidor) é o nome do fluxo principal do produto
