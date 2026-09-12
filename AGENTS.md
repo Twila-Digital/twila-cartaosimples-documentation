@@ -1,33 +1,30 @@
-> **First-time setup**: Customize this file for your project. Prompt the user to customize this file for their project.
-> For Mintlify product knowledge (components, configuration, writing standards),
-> install the Mintlify skill: `npx skills add https://mintlify.com/docs`
+# Instruções para agentes neste projeto
 
-# Documentation project instructions
+## Sobre este projeto
 
-## About this project
+- Documentação da API de integração do Parcele + (crédito e parcelamento no momento da compra), construída em [Mintlify](https://mintlify.com)
+- Páginas são arquivos MDX com front-matter YAML
+- Configuração de navegação em `docs.json`
+- Páginas de referência de endpoints usam `openapi:` no front-matter e puxam descrição/parâmetros de `openapi.yaml` — não duplique essa informação manualmente na página
+- Rode `mint dev` para pré-visualizar localmente e `mint broken-links` para checar links
 
-- This is a documentation site built on [Mintlify](https://mintlify.com)
-- Pages are MDX files with YAML frontmatter
-- Configuration lives in `docs.json`
-- Run `mint dev` to preview locally
-- Run `mint broken-links` to check links
+## Terminologia
 
-## Terminology
+- "Parcele +" (com espaço antes do `+`), não "Parcele+" ou "ParceleMais" em texto visível para o leitor — "ParceleMais" é usado apenas em identificadores técnicos (nome do SDK, `PackageId`, etc.)
+- "pedido", não "compra" ou "transação"
+- "parceiro", não "cliente da API" ou "merchant" — "cliente" é reservado para o cliente final do parceiro (`Customer`)
+- "CDC" (crédito direto ao consumidor) é o nome do fluxo principal do produto
+- Todo o conteúdo das páginas é em português do Brasil
 
-{/* Add product-specific terms and preferred usage */}
-{/* Example: Use "workspace" not "project", "member" not "user" */}
+## Estilo
 
-## Style preferences
+- Use voz ativa e segunda pessoa ("você")
+- Frases curtas — uma ideia por frase
+- Sentence case em títulos
+- Nomes de arquivo, comandos, caminhos e identificadores de código em `code formatting`
+- Campos JSON de listas paginadas usam `itens` (não `items`) — reflete o nome do campo na API real
 
-{/* Add any project-specific style rules below */}
+## Limites de conteúdo
 
-- Use active voice and second person ("you")
-- Keep sentences concise — one idea per sentence
-- Use sentence case for headings
-- Bold for UI elements: Click **Settings**
-- Code formatting for file names, commands, paths, and code references
-
-## Content boundaries
-
-{/* Define what should and shouldn't be documented */}
-{/* Example: Don't document internal admin features */}
+- Documenta apenas a API de integração pública (`WebIntegration`), voltada a parceiros — não documenta endpoints internos de backoffice/admin
+- SDKs oficiais ficam na aba "SDKs"; ao adicionar um novo SDK, inclua link para o repositório no GitHub e, se aplicável, para o pacote publicado
