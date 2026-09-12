@@ -1,0 +1,93 @@
+---
+title: 'Para desenvolvedores'
+description: 'Visão técnica da API do Parcele+ — ambientes, autenticação, formato de respostas e erros'
+icon: 'code'
+---
+
+Se você chegou aqui vindo da página [para lojistas](/pages/for-merchants), esta é a visão técnica: como a API do Parcele+ funciona por baixo do capô.
+
+<Card title="Não é a página de referência de endpoints" icon="circle-info" horizontal>
+  Esta página explica os conceitos que atravessam toda a API. Para o contrato de cada endpoint, use o menu **CDC**/**Webhooks** ou a [referência OpenAPI](/openapi.yaml).
+</Card>
+
+## Ambientes
+
+| Ambiente | Base URL | Uso |
+| --- | --- | --- |
+| Staging | `https://api.staging.parcelemais.com.br/integration` | Testes, sem afetar produção — veja [ambiente de desenvolvimento](/pages/development) |
+| Produção | `https://api.parcelemais.com.br/integration` | Pedidos reais |
+
+O ambiente é determinado pela URL base que você chama — as credenciais (`ClientId`/`ClientSecret`) são específicas de cada ambiente.
+
+## Autenticação
+
+Toda requisição autenticada usa um Bearer token, obtido via `ClientId`/`ClientSecret` solicitados ao nosso suporte.
+
+<Card title="Fluxo completo de autenticação" icon="key" href="/pages/authentication" horizontal>
+  Veja como gerar o token e as boas práticas de segurança.
+</Card>
+
+## Formato das respostas
+
+Os campos JSON são em português. Listas paginadas seguem sempre o mesmo formato:
+
+```json
+{
+  "itens": [ ],
+  "pagina": {
+    "numero": 1,
+    "tamanho": 20,
+    "total": 42,
+    "tem_proximo": true,
+    "tem_anterior": false
+  }
+}
+```
+
+## Erros
+
+Toda resposta de erro segue [RFC 7807 (Problem Details)](https://tools.ietf.org/html/rfc7807), com campos em português (`tipo`, `titulo`, `detalhe`, `erros`).
+
+<Card title="Formato completo de erro, CorrelationId e Idempotency-Key" icon="triangle-exclamation" href="/pages/errors" horizontal>
+  Veja o formato de erro, rastreamento de requisições e reenvio seguro de operações.
+</Card>
+
+## Idempotência
+
+Endpoints de criação (`POST /v1/order`, `/v1/order/invoice`, `/v1/order/start-cdc-sale`) aceitam o cabeçalho opcional `Idempotency-Key`: reenviar a mesma chave com o mesmo corpo, dentro de 24 horas, retorna a resposta original em vez de repetir a operação.
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="401 Unauthorized" icon="lock">
+    O token não foi enviado, é inválido, expirou ou foi revogado. Gere um novo token — veja [Autenticação](/pages/authentication).
+  </Accordion>
+  <Accordion title="409 Conflict em POST" icon="ban">
+    Uma `Idempotency-Key` já usada com um corpo diferente, ou uma requisição concorrente com a mesma chave ainda em processamento. Veja [Erros e idempotência](/pages/errors).
+  </Accordion>
+  <Accordion title="Erro de validação com campo `erros` vazio" icon="magnifying-glass">
+    O campo `erros` só é preenchido em erros de **validação de payload**. Erros de regra de negócio (ex.: saldo indisponível) vêm apenas em `detalhe`.
+  </Accordion>
+</AccordionGroup>
+
+## Boas práticas de segurança
+
+<Card icon="shield-halved" horizontal>
+  * Armazene `ClientId`/`ClientSecret` em variáveis de ambiente ou um gerenciador de segredos — nunca no código-fonte
+  * Nunca exponha o `ClientSecret` em código client-side (app mobile, SPA)
+  * A Parcele+ nunca solicita suas credenciais por e-mail ou telefone
+</Card>
+
+## Por onde continuar
+
+<CardGroup cols={3}>
+  <Card title="Fluxo de venda CDC" icon="arrow-right-arrow-left" href="/pages/flow">
+    A ordem de chamadas do início ao fim.
+  </Card>
+  <Card title="Webhooks" icon="bell" href="/pages/webhooks">
+    Notificações em tempo real sobre o pedido.
+  </Card>
+  <Card title="SDK .NET" icon="microsoft" href="/pages/sdks/sdks">
+    Não lide com HTTP manualmente.
+  </Card>
+</CardGroup>

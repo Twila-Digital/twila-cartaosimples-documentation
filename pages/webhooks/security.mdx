@@ -1,0 +1,66 @@
+---
+title: 'Verificação e segurança'
+description: 'Como validar a autenticidade de um webhook e lidar com entregas'
+icon: 'shield-halved'
+---
+
+## Assinatura HMAC-SHA256
+
+Toda notificação de webhook é assinada com **HMAC-SHA256**, enviada no cabeçalho `X-ParceleMais-Signature`, para confirmar que a requisição veio da Parcele+ e não foi forjada por terceiros.
+
+```
+X-ParceleMais-Signature: t=1715792400,v1=5f2b3c8e1a9d7c6b4e2f1a0d9c8b7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d
+```
+
+- `t` — timestamp Unix (segundos) de quando a notificação foi enviada.
+- `v1` — HMAC-SHA256 em hexadecimal, calculado sobre a string `{t}.{corpo_bruto_da_requisição}`, usando a `chaveAssinatura` do webhook.
+
+<Card title="SDK .NET" icon="microsoft" href="/pages/sdks/dotnet" horizontal>
+  `ParceleMaisWebhookEvent.Parse(rawJson, signatureHeader, signingSecret)` já valida a assinatura e a janela de replay para você.
+</Card>
+
+Se você não usa o SDK .NET, recalcule manualmente:
+
+1. Extraia `t` e `v1` do cabeçalho `X-ParceleMais-Signature`.
+2. Calcule `HMACSHA256("{t}.{corpo_bruto}", chaveAssinatura)` em hexadecimal.
+3. Compare o resultado com `v1` usando uma comparação de tempo constante (`timingSafeEqual`/`CryptographicOperations.FixedTimeEquals` — nunca `==` ou `Equals`).
+4. Rejeite se `t` estiver a mais de 5 minutos de distância do horário atual (proteção contra replay).
+
+<Warning>
+  Sempre valide a assinatura contra o **corpo bruto** da requisição, antes de desserializar. Reformatar o JSON altera o hash calculado e invalida a comparação.
+</Warning>
+
+## Autenticação do seu endpoint
+
+Além da assinatura, você pode exigir uma credencial própria (Basic ou Bearer JWT) na configuração do webhook — veja os [tipos de autenticação](/pages/webhooks) disponíveis.
+
+## Entregas não têm retentativa automática
+
+<Warning>
+  Se o seu endpoint responder com erro ou timeout, a notificação **não é reenviada automaticamente**. Trate seu endpoint como não confiável por padrão: responda rápido (2xx) e processe de forma assíncrona, e use `GET /v1/order/{id}` para reconciliar o status caso desconfie de uma notificação perdida.
+</Warning>
+
+## Deduplicação
+
+O payload do webhook de Pedido não tem um identificador de evento próprio — apenas `id_pedido` e `enum_status`:
+
+```json
+{
+  "id_pedido": "00000000-0000-0000-0000-000000000000",
+  "enum_status": 1,
+  "status": "Analysing"
+}
+```
+
+Use a combinação `id_pedido` + `enum_status` (+ o `t` do cabeçalho de assinatura, se quiser distinguir reenvios do mesmo status) como chave de deduplicação antes de processar.
+
+## Checklist de segurança
+
+<Card icon="list-check" horizontal>
+  * Valide a assinatura HMAC contra o corpo bruto, com comparação de tempo constante
+  * Rejeite timestamps (`t`) fora da janela de replay
+  * Configure autenticação (Basic ou JWT) na criação do webhook, além da assinatura
+  * Responda 2xx rápido e processe de forma assíncrona
+  * Deduplique por `id_pedido` + `enum_status`
+  * Não assuma retentativa automática — reconcilie via `GET /v1/order/{id}` quando em dúvida
+</Card>

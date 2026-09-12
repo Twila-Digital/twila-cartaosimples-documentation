@@ -30,6 +30,8 @@
             "group": "Introdução",
             "pages": [
               "pages/introduction",
+              "pages/for-merchants",
+              "pages/for-developers",
               "pages/development",
               "pages/authentication",
               "pages/test-cards",
@@ -80,7 +82,7 @@
         "groups": [
           {
             "group": "Visão geral",
-            "pages": ["pages/webhooks"]
+            "pages": ["pages/webhooks", "pages/webhooks/security"]
           },
           {
             "group": "Webhooks",
