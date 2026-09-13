@@ -1,0 +1,57 @@
+---
+title: 'Visão Geral'
+icon: 'sparkles'
+description: 'Ferramentas e contexto especializado para integrar o Parcele+ com IA.'
+---
+
+<div style={{
+  position: "relative",
+  textAlign: "center",
+  padding: "64px 20px",
+  background: "linear-gradient(135deg, rgba(58,54,245,0.08) 0%, rgba(58,54,245,0.02) 100%)",
+  borderBottom: "1px solid rgba(255,255,255,0.06)",
+  borderRadius: "12px",
+  marginBottom: "40px"
+}}>
+  <h1 style={{ fontSize: "36px", fontWeight: "600", marginBottom: "12px", color: "#fff" }}>
+    Parcele+ + IA
+  </h1>
+  <p style={{ maxWidth: "640px", margin: "0 auto", opacity: 0.7, fontSize: "17px", fontWeight: "300" }}>
+    Ensine agentes de IA e editores assistidos a integrar corretamente com o Parcele+ — sem magia, sem atrito.
+  </p>
+</div>
+
+## O que está disponível
+
+<Card title="Skills" icon="book-open" href="/pages/ai/skills" horizontal>
+  Pacotes de contexto especializado que ensinam agentes de IA a integrar corretamente com o Parcele+ — regras de negócio, padrões técnicos e exemplos prontos nas 6 linguagens dos SDKs oficiais.
+</Card>
+
+---
+
+## Quando usar
+
+As Skills servem pra dois momentos diferentes:
+
+| | Integration Mode | Agent Mode |
+|---|---|---|
+| **Objetivo** | Gerar código de integração correto | Executar ações direto na API via `curl` |
+| **Ideal para** | IDEs com AI coding (Cursor, Claude Code) escrevendo um SDK | Automações, assistentes, agentes operando a API sem escrever código |
+| **Formato** | Arquivos de contexto lidos pelo editor (`rules/`, `examples/`) | `rules/agent.md` / `SKILL-AGENT.md` |
+| **Requer credenciais** | Não (só pra rodar o código gerado) | Sim (`ClientId`/`ClientSecret`) |
+
+---
+
+## Ecossistema
+
+<CardGroup cols={3}>
+  <Card title="Documentação Oficial" icon="book" href="https://documentacao.parcelemais.com.br">
+    Guia completo da API do Parcele+.
+  </Card>
+  <Card title="SDKs Oficiais" icon="boxes-stacked" href="/pages/sdks/sdks">
+    .NET, Java, Node.js, Python, PHP e Go.
+  </Card>
+  <Card title="Skills no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-skills">
+    Código-fonte das regras, exemplos e ferramentas.
+  </Card>
+</CardGroup>
