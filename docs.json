@@ -135,6 +135,15 @@
             "pages": ["pages/sdks/dotnet", "pages/sdks/java", "pages/sdks/node", "pages/sdks/python", "pages/sdks/php", "pages/sdks/go"]
           }
         ]
+      },
+      {
+        "tab": "IA",
+        "groups": [
+          {
+            "group": "IA",
+            "pages": ["pages/ai/skills"]
+          }
+        ]
       }
     ]
   },
@@ -162,7 +171,7 @@
   },
   "footer": {
     "socials": {
-      "github": "https://github.com/Twila-Digital/twila-cartaosimples-documentation",
+      "github": "https://github.com/Twila-Digital/twila-parcelemais-documentation",
       "linkedin": "https://www.linkedin.com/company/twila-tecnologia"
     }
   }
