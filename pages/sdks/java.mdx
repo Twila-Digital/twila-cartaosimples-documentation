@@ -1,0 +1,106 @@
+---
+title: 'SDK Java'
+description: 'SDK oficial em Java para integrar com a API do Parcele+.'
+icon: 'java'
+---
+
+O SDK oficial em Java encapsula autenticação, renovação de token, política de retry/circuit breaker e serialização, para que você chame a API do Parcele+ a partir de Java sem lidar diretamente com HTTP.
+
+<Card title="Código-fonte no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-java-sdk" horizontal>
+  Repositório público — código, exemplos (`samples/`) e histórico de versões.
+</Card>
+
+## Compatibilidade
+
+| Runtime | Versões aceitas |
+| --- | --- |
+| JDK | 8 ou superior |
+
+HTTP via [OkHttp](https://square.github.io/okhttp/) — `java.net.http.HttpClient` do próprio JDK exigiria Java 11+, incompatível com o piso de Java 8 do SDK.
+
+## Instalação
+
+Maven:
+
+```xml
+<dependency>
+    <groupId>twila</groupId>
+    <artifactId>parcelemais</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+Gradle (Kotlin DSL):
+
+```kotlin
+implementation("twila:parcelemais:1.0.0")
+```
+
+## Configuração
+
+```java
+import twila.parcelemais.ParceleMaisClient;
+import twila.parcelemais.config.ParceleMaisEnvironment;
+
+ParceleMaisClient client = ParceleMaisClient.builder()
+        .clientId("<seu-client-id>")
+        .clientSecret("<seu-client-secret>")
+        .environment(ParceleMaisEnvironment.STAGING)
+        .build();
+```
+
+`ParceleMaisClient` é thread-safe — construa uma única instância e reaproveite como singleton na sua aplicação; feche-a só no shutdown (`try-with-resources` ou `@Bean(destroyMethod = "close")` num container de DI).
+
+## Uso
+
+```java
+import twila.parcelemais.simulations.model.SimulateInstallmentsRequest;
+
+var parcelas = client.simulations().simulateInstallments(
+        SimulateInstallmentsRequest.builder()
+                .requestedAmount(new BigDecimal("1500.00"))
+                .build());
+
+for (var parcela : parcelas)
+    System.out.printf("%dx de %s%n", parcela.getTerm(), parcela.getInstallmentAmount());
+```
+
+O client expõe um método por recurso:
+
+| Cliente | Recurso |
+| --- | --- |
+| `client.orders()` | Pedidos (criar, consultar, listar, iniciar venda CDC, importar nota fiscal) |
+| `client.simulations()` | Simulação de parcelas e valores |
+| `client.customers()` | Clientes (consultar, listar) |
+| `client.webhooks()` | Webhooks (criar, listar, atualizar, remover) |
+
+## Tratamento de erros
+
+Exceções são tipadas por categoria: `ParceleMaisAuthenticationException`, `ParceleMaisValidationException`, `ParceleMaisRateLimitException`, `ParceleMaisTimeoutException`, e a base `ParceleMaisApiException` para os demais erros de API.
+
+```java
+catch (ParceleMaisApiException ex) {
+    System.out.printf("Erro da API (%d, %s): %s%n", ex.getStatusCode(), ex.getErrorCode(), ex.getMessage());
+}
+```
+
+## Validando assinatura de webhooks
+
+```java
+import twila.parcelemais.webhooks.ParceleMaisWebhookEvent;
+
+var evento = ParceleMaisWebhookEvent.parse(rawJson, signatureHeader, signingSecret);
+```
+
+## Exemplos completos
+
+O repositório inclui samples prontos para rodar em `samples/`:
+
+<CardGroup cols={2}>
+  <Card title="Java puro" icon="mug-hot">
+    `parcelemais-sample-plain` — sem framework, `main()` standalone.
+  </Card>
+  <Card title="Spring Boot" icon="leaf">
+    `parcelemais-sample-spring-boot` — `ParceleMaisClient` como `@Bean` singleton.
+  </Card>
+</CardGroup>

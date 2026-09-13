@@ -17,6 +17,7 @@ O índice completo da documentação está disponível em [`/llms.txt`](https://
 ## SDKs
 
 - [.NET](https://github.com/Twila-Digital/twila-parcelemais-dotnet-sdk)
+- [Java](https://github.com/Twila-Digital/twila-parcelemais-java-sdk)
 
 ## Desenvolvimento local
 
