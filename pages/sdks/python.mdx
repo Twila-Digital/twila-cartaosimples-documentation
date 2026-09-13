@@ -1,0 +1,97 @@
+---
+title: 'SDK Python'
+description: 'SDK oficial em Python para integrar com a API do Parcele+.'
+icon: 'python'
+---
+
+O SDK oficial em Python encapsula autenticação, renovação de token, política de retry/circuit breaker e serialização, para que você chame a API do Parcele+ sem lidar diretamente com HTTP.
+
+<Card title="Código-fonte no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-python-sdk" horizontal>
+  Repositório público — código, exemplos (`samples/`) e histórico de versões.
+</Card>
+
+## Compatibilidade
+
+| Runtime | Versões aceitas |
+| --- | --- |
+| Python | 3.9 ou superior |
+
+Cliente síncrono, baseado em [httpx](https://www.python-httpx.org/), com tipos totalmente anotados (`py.typed`, PEP 561).
+
+## Instalação
+
+```bash
+pip install twila-parcelemais
+```
+
+## Configuração
+
+```python
+from twila_parcelemais import ParceleMaisClient, ParceleMaisClientOptions, ParceleMaisEnvironment
+
+client = ParceleMaisClient(
+    ParceleMaisClientOptions(
+        client_id="<seu-client-id>",
+        client_secret="<seu-client-secret>",
+        environment=ParceleMaisEnvironment.STAGING,
+    )
+)
+```
+
+`ParceleMaisClient` deve ser reaproveitado como singleton na sua aplicação — ele mantém o cache do token de acesso e o estado do circuit breaker. Feche-o só no shutdown (`client.close()`, ou use como context manager: `with ParceleMaisClient(options) as client:`).
+
+## Uso
+
+```python
+from twila_parcelemais import SimulateInstallmentsRequest
+
+parcelas = client.simulations.simulate_installments(SimulateInstallmentsRequest(requested_amount=1500.0))
+
+for parcela in parcelas:
+    print(f"{parcela.term}x de {parcela.installment_amount} (total {parcela.total_amount})")
+```
+
+O client expõe um objeto por recurso:
+
+| Cliente | Métodos |
+| --- | --- |
+| `client.orders` | `create`, `get`, `list`, `start_cdc_sale`, `import_invoice` |
+| `client.simulations` | `simulate_installments`, `simulate_values` |
+| `client.customers` | `get`, `list` |
+| `client.webhooks` | `create`, `list`, `update`, `delete` |
+
+`orders.list(...)` e `customers.list(...)` retornam um `PagedResult[T]` — sem auto-paginação, você controla explicitamente o avanço de página.
+
+## Tratamento de erros
+
+Erros são tipados por categoria: `ParceleMaisConfigurationError`, `ParceleMaisAuthenticationError`, `ParceleMaisValidationError`, `ParceleMaisRateLimitError`, `ParceleMaisTimeoutError`, e a base `ParceleMaisApiError` para os demais erros de API.
+
+```python
+from twila_parcelemais import ParceleMaisApiError
+
+try:
+    client.orders.get(order_id)
+except ParceleMaisApiError as error:
+    print(f"{error.status_code} {error.error_code}: {error}")
+```
+
+## Validando assinatura de webhooks
+
+```python
+from twila_parcelemais import parse_webhook_event
+
+evento = parse_webhook_event(raw_body, signature_header, signing_secret)
+```
+
+## Exemplos completos
+
+O repositório inclui samples prontos para rodar em `samples/`:
+
+<CardGroup cols={2}>
+  <Card title="Standalone" icon="python">
+    `sample_plain` — script sem framework.
+  </Card>
+  <Card title="Flask" icon="flask">
+    `sample_flask` — `ParceleMaisClient` como singleton na app factory.
+  </Card>
+</CardGroup>
