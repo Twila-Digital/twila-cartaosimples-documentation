@@ -1,0 +1,102 @@
+---
+title: 'SDK Node.js'
+description: 'SDK oficial em Node.js/TypeScript para integrar com a API do Parcele+.'
+icon: 'node-js'
+---
+
+O SDK oficial em Node.js/TypeScript encapsula autenticação, renovação de token, política de retry/circuit breaker e serialização, para que você chame a API do Parcele+ sem lidar diretamente com HTTP.
+
+<Card title="Código-fonte no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-node-sdk" horizontal>
+  Repositório público — código, exemplos (`samples/`) e histórico de versões.
+</Card>
+
+## Compatibilidade
+
+| Runtime | Versões aceitas |
+| --- | --- |
+| Node.js | 14 ou superior |
+
+Publica **CommonJS** (`require`) e **ES Modules** (`import`) no mesmo pacote, com tipos TypeScript inclusos — funciona em projetos legados e modernos sem configuração extra.
+
+## Instalação
+
+```bash
+npm install @twila/parcelemais
+```
+
+## Configuração
+
+```typescript
+import { ParceleMaisClient, ParceleMaisEnvironment } from '@twila/parcelemais';
+
+const client = new ParceleMaisClient({
+  clientId: '<seu-client-id>',
+  clientSecret: '<seu-client-secret>',
+  environment: ParceleMaisEnvironment.Staging,
+});
+```
+
+Equivalente em CommonJS:
+
+```javascript
+const { ParceleMaisClient, ParceleMaisEnvironment } = require('@twila/parcelemais');
+```
+
+`ParceleMaisClient` deve ser reaproveitado como singleton na sua aplicação — ele mantém o cache do token de acesso e o estado do circuit breaker.
+
+## Uso
+
+```typescript
+const parcelas = await client.simulations.simulateInstallments({ requestedAmount: 1500.0 });
+
+for (const parcela of parcelas)
+  console.log(`${parcela.term}x de ${parcela.installmentAmount} (total ${parcela.totalAmount})`);
+```
+
+O client expõe um objeto por recurso:
+
+| Cliente | Métodos |
+| --- | --- |
+| `client.orders` | `create`, `get`, `list`, `startCdcSale`, `importInvoice` |
+| `client.simulations` | `simulateInstallments`, `simulateValues` |
+| `client.customers` | `get`, `list` |
+| `client.webhooks` | `create`, `list`, `update`, `delete` |
+
+`orders.list(...)` e `customers.list(...)` retornam um `PagedResult<T>` — sem auto-paginação, você controla explicitamente o avanço de página.
+
+## Tratamento de erros
+
+Erros são tipados por categoria: `ParceleMaisConfigurationError`, `ParceleMaisAuthenticationError`, `ParceleMaisValidationError`, `ParceleMaisRateLimitError`, `ParceleMaisTimeoutError`, e a base `ParceleMaisApiError` para os demais erros de API.
+
+```typescript
+import { ParceleMaisApiError } from '@twila/parcelemais';
+
+try {
+  await client.orders.get(orderId);
+} catch (error) {
+  if (error instanceof ParceleMaisApiError) {
+    console.log(`${error.statusCode} ${error.errorCode}: ${error.message}`);
+  }
+}
+```
+
+## Validando assinatura de webhooks
+
+```typescript
+import { parseWebhookEvent } from '@twila/parcelemais';
+
+const evento = parseWebhookEvent(rawBody, signatureHeader, signingSecret);
+```
+
+## Exemplos completos
+
+O repositório inclui samples prontos para rodar em `samples/`:
+
+<CardGroup cols={2}>
+  <Card title="CommonJS" icon="js">
+    `sample-cjs` — `require`, Node puro.
+  </Card>
+  <Card title="ES Modules" icon="node-js">
+    `sample-esm` — `import`, Node puro.
+  </Card>
+</CardGroup>
