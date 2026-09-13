@@ -132,7 +132,7 @@
           },
           {
             "group": "Oficiais",
-            "pages": ["pages/sdks/dotnet", "pages/sdks/java"]
+            "pages": ["pages/sdks/dotnet", "pages/sdks/java", "pages/sdks/node"]
           }
         ]
       }
