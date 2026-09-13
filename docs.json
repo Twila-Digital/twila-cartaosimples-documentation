@@ -135,6 +135,15 @@
             "pages": ["pages/sdks/dotnet", "pages/sdks/java", "pages/sdks/node", "pages/sdks/python", "pages/sdks/php", "pages/sdks/go"]
           }
         ]
+      },
+      {
+        "tab": "IA",
+        "groups": [
+          {
+            "group": "IA",
+            "pages": ["pages/ai/skills"]
+          }
+        ]
       }
     ]
   },

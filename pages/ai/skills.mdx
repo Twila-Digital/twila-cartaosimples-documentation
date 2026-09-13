@@ -1,0 +1,104 @@
+---
+title: 'Skills'
+icon: 'book-open'
+description: 'Pacotes de contexto especializado para ensinar agentes de IA a integrar com o Parcele+.'
+---
+
+A **Parcele+ Skills** é um conjunto de **conhecimentos estruturados**, **regras técnicas** e **exemplos práticos** projetados para ensinar agentes de IA e desenvolvedores a integrar corretamente com o ecossistema Parcele+.
+
+Funciona como um **manual inteligente e executável** — focado em reduzir ambiguidade, evitar erros comuns e acelerar integrações reais, especialmente em ambientes assistidos por IA.
+
+<Card title="Ver repositório no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-skills" horizontal>
+  Repositório público — regras, exemplos e ferramentas nas 6 linguagens dos SDKs oficiais.
+</Card>
+
+---
+
+## O que são Skills?
+
+Skills são **pacotes de contexto especializado** que descrevem:
+
+- Regras de negócio do Parcele+ (status de pedido, simulação, desembolso)
+- Padrões técnicos oficiais da API
+- Convenções de código por linguagem (uma regra por SDK)
+- Boas práticas para autenticação, webhooks e segurança
+
+Elas podem ser consumidas por **IDEs** e **ferramentas de AI coding** como Cursor, Claude Code e similares.
+
+<CardGroup cols={3}>
+  <Card title="Contexto Preciso" icon="pen">
+    Informação atualizada e específica sobre a API e os 6 SDKs oficiais.
+  </Card>
+  <Card title="Padronização" icon="ruler">
+    Código gerado alinhado às convenções de cada SDK.
+  </Card>
+  <Card title="Aceleração" icon="rocket">
+    Menos leitura de docs longas, mais regras diretas.
+  </Card>
+  <Card title="Exemplos Reais" icon="code">
+    Implementações práticas em .NET, Java, Node.js, Python, PHP e Go.
+  </Card>
+  <Card title="IA-friendly" icon="sparkles">
+    Estrutura pensada para consumo por agentes de IA.
+  </Card>
+  <Card title="Menos Erros" icon="shield-check">
+    Reduz interpretações erradas e integrações incorretas.
+  </Card>
+</CardGroup>
+
+---
+
+## Como instalar
+
+<Steps>
+  <Step title="Clone o repositório">
+    ```bash
+    git clone https://github.com/Twila-Digital/twila-parcelemais-skills
+    ```
+  </Step>
+
+  <Step title="Adicione ao contexto da IA">
+    Inclua a pasta do repositório no contexto do seu editor.
+
+    **Cursor:** adicione o caminho em `.cursorrules` ou workspace rules.
+
+    **Claude Code:** referencie na configuração do projeto.
+
+    **Skill única:** se sua ferramenta só aceita um arquivo, use `SKILL-CONSOLIDATED.md` (tudo concatenado) ou `SKILL-AGENT.md` (só o modo de API direta via `curl`).
+  </Step>
+</Steps>
+
+---
+
+## Estrutura do repositório
+
+- **[rules](https://github.com/Twila-Digital/twila-parcelemais-skills/tree/production/rules)** — regras específicas por linguagem (.NET / Java / Node.js / Python / PHP / Go) e por módulo (Orders, Simulations, Customers, Webhooks, Security), mais o modo de uso direto da API (`agent.md`)
+- **[examples](https://github.com/Twila-Digital/twila-parcelemais-skills/tree/production/examples)** — implementações de referência prontas para uso, por linguagem
+- **[tools](https://github.com/Twila-Digital/twila-parcelemais-skills/tree/production/tools)** — documentação técnica de autenticação, ambientes, produção e os 6 SDKs
+- **[utils](https://github.com/Twila-Digital/twila-parcelemais-skills/tree/production/utils)** — FAQ e glossário
+
+---
+
+## Filosofia
+
+As Parcele+ Skills seguem os mesmos princípios dos SDKs oficiais:
+
+- **Explícitas** — sem regras implícitas ou achismos
+- **Auditáveis** — texto claro, versionado e revisável
+- **Modulares** — cada skill resolve um problema específico
+- **IA-first** — escritas pensando em consumo automático
+
+<CardGroup cols={2}>
+  <Card title="Human-readable" icon="user">
+    Também úteis para humanos, não só para máquinas.
+  </Card>
+  <Card title="Fonte única de verdade" icon="database">
+    Evita divergência entre docs, exemplos e código dos 6 SDKs.
+  </Card>
+</CardGroup>
+
+---
+
+<Card title="SKILL.md" icon="book-open" href="https://github.com/Twila-Digital/twila-parcelemais-skills/blob/production/SKILL.md">
+  Documento central que descreve todas as skills disponíveis e como usá-las.
+</Card>
