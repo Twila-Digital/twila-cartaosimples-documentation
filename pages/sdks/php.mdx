@@ -1,0 +1,99 @@
+---
+title: 'SDK PHP'
+description: 'SDK oficial em PHP para integrar com a API do Parcele+.'
+icon: 'php'
+---
+
+O SDK oficial em PHP encapsula autenticação, renovação de token, política de retry/circuit breaker e serialização, para que você chame a API do Parcele+ sem lidar diretamente com HTTP.
+
+<Card title="Código-fonte no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-php-sdk" horizontal>
+  Repositório público — código, exemplos (`samples/`) e histórico de versões.
+</Card>
+
+## Compatibilidade
+
+| Runtime | Versões aceitas |
+| --- | --- |
+| PHP | 7.4 ou superior |
+
+Cliente síncrono, baseado em [Guzzle](https://docs.guzzlephp.org/).
+
+## Instalação
+
+```bash
+composer require twila/parcelemais
+```
+
+## Configuração
+
+```php
+use Twila\ParceleMais\ParceleMaisClient;
+use Twila\ParceleMais\Config\ClientOptions;
+use Twila\ParceleMais\Config\Environment;
+
+$client = new ParceleMaisClient(new ClientOptions(
+    '<seu-client-id>',
+    '<seu-client-secret>',
+    Environment::STAGING
+));
+```
+
+`ParceleMaisClient` deve ser reaproveitado (não crie uma instância por requisição) — ele mantém o cache do token de acesso e o estado do circuit breaker durante o ciclo de vida do processo/worker.
+
+## Uso
+
+```php
+use Twila\ParceleMais\Simulations\SimulateInstallmentsRequest;
+
+$parcelas = $client->simulations->simulateInstallments(new SimulateInstallmentsRequest(1500.0));
+
+foreach ($parcelas as $parcela) {
+    echo "{$parcela->term}x de {$parcela->installmentAmount} (total {$parcela->totalAmount})" . PHP_EOL;
+}
+```
+
+O client expõe um objeto por recurso:
+
+| Cliente | Métodos |
+| --- | --- |
+| `$client->orders` | `create`, `get`, `list`, `startCdcSale`, `importInvoice` |
+| `$client->simulations` | `simulateInstallments`, `simulateValues` |
+| `$client->customers` | `get`, `list` |
+| `$client->webhooks` | `create`, `list`, `update`, `delete` |
+
+`orders->list(...)` e `customers->list(...)` retornam um `PagedResult` — sem auto-paginação, você controla explicitamente o avanço de página.
+
+## Tratamento de erros
+
+Exceções são tipadas por categoria: `ParceleMaisConfigurationException`, `ParceleMaisAuthenticationException`, `ParceleMaisValidationException`, `ParceleMaisRateLimitException`, `ParceleMaisTimeoutException`, e a base `ParceleMaisApiException` para os demais erros de API.
+
+```php
+use Twila\ParceleMais\Errors\ParceleMaisApiException;
+
+try {
+    $client->orders->get($orderId);
+} catch (ParceleMaisApiException $e) {
+    echo "{$e->getStatusCode()} {$e->getErrorCode()}: {$e->getMessage()}" . PHP_EOL;
+}
+```
+
+## Validando assinatura de webhooks
+
+```php
+use Twila\ParceleMais\Webhooks\WebhookEvent;
+
+$evento = WebhookEvent::parse($rawBody, $signatureHeader, $signingSecret);
+```
+
+## Exemplos completos
+
+O repositório inclui samples prontos para rodar em `samples/`:
+
+<CardGroup cols={2}>
+  <Card title="Standalone" icon="php">
+    `sample-cli` — script sem framework.
+  </Card>
+  <Card title="Slim Framework" icon="bolt">
+    `sample-slim` — `ParceleMaisClient` como singleton na aplicação.
+  </Card>
+</CardGroup>
