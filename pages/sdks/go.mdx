@@ -1,0 +1,99 @@
+---
+title: 'SDK Go'
+description: 'SDK oficial em Go para integrar com a API do Parcele+.'
+icon: 'golang'
+---
+
+O SDK oficial em Go encapsula autenticação, renovação de token, política de retry/circuit breaker e serialização, para que você chame a API do Parcele+ sem lidar diretamente com HTTP.
+
+<Card title="Código-fonte no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-go-sdk" horizontal>
+  Repositório público — código, exemplos (`samples/`) e histórico de versões.
+</Card>
+
+## Compatibilidade
+
+| Runtime | Versões aceitas |
+| --- | --- |
+| Go | 1.18 ou superior |
+
+Zero dependências externas — usa só a standard library (`net/http`, `encoding/json`, `crypto/hmac`). Um `*Client` é seguro para uso concorrente por múltiplas goroutines.
+
+## Instalação
+
+```bash
+go get github.com/Twila-Digital/twila-parcelemais-go-sdk
+```
+
+## Configuração
+
+```go
+import parcelemais "github.com/Twila-Digital/twila-parcelemais-go-sdk"
+
+client, err := parcelemais.NewClient(parcelemais.ClientOptions{
+    ClientID:     "<seu-client-id>",
+    ClientSecret: "<seu-client-secret>",
+    Environment:  parcelemais.EnvironmentStaging,
+})
+if err != nil {
+    log.Fatal(err)
+}
+```
+
+`*Client` deve ser reaproveitado como singleton na sua aplicação — ele mantém o cache do token de acesso e o estado do circuit breaker.
+
+## Uso
+
+```go
+parcelas, err := client.Simulations.SimulateInstallments(ctx, parcelemais.SimulateInstallmentsRequest{
+    RequestedAmount: 1500.0,
+})
+if err != nil {
+    log.Fatal(err)
+}
+
+for _, parcela := range parcelas {
+    fmt.Printf("%dx de %.2f (total %.2f)\n", parcela.Term, parcela.InstallmentAmount, parcela.TotalAmount)
+}
+```
+
+O client expõe uma struct por recurso:
+
+| Cliente | Métodos |
+| --- | --- |
+| `client.Orders` | `Create`, `Get`, `List`, `StartCdcSale`, `ImportInvoice` |
+| `client.Simulations` | `SimulateInstallments`, `SimulateValues` |
+| `client.Customers` | `Get`, `List` |
+| `client.Webhooks` | `Create`, `List`, `Update`, `Delete` |
+
+`Orders.List(...)` e `Customers.List(...)` retornam um `*PagedResult[T]` (generics) — sem auto-paginação, você controla explicitamente o avanço de página.
+
+## Tratamento de erros
+
+Em Go, erros são valores de retorno, não exceções. O SDK define uma hierarquia de erros tipados verificável via `errors.As`: `*ConfigurationError`, `*AuthenticationError`, `*TimeoutError`, `*WebhookSignatureError`, e `*APIError` (com `*ValidationError` e `*RateLimitError` embutindo `*APIError`) para os demais erros de API.
+
+```go
+var apiErr *parcelemais.APIError
+order, err := client.Orders.Get(ctx, orderID)
+if errors.As(err, &apiErr) {
+    fmt.Printf("%d %s: %s\n", apiErr.StatusCode, apiErr.ErrorCode(), apiErr)
+}
+```
+
+## Validando assinatura de webhooks
+
+```go
+evento, err := parcelemais.ParseWebhookEvent(rawBody, signatureHeader, signingSecret)
+```
+
+## Exemplos completos
+
+O repositório inclui samples prontos para rodar em `samples/`:
+
+<CardGroup cols={2}>
+  <Card title="CLI" icon="golang">
+    `sample-cli` — script sem framework.
+  </Card>
+  <Card title="HTTP" icon="server">
+    `sample-http` — `*Client` como singleton num servidor HTTP padrão.
+  </Card>
+</CardGroup>
