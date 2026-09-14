@@ -1,0 +1,132 @@
+---
+title: 'MCP Server'
+description: 'Integre o Parcele+ diretamente em agentes de IA como Claude Desktop e Cursor via Model Context Protocol.'
+icon: 'plug'
+---
+
+O **Parcele+ MCP Server** expõe a API do Parcele+ como ferramentas nativas para agentes de IA compatíveis com o [Model Context Protocol](https://modelcontextprotocol.io). Com ele, você pode criar pedidos, simular parcelas, consultar clientes e gerenciar webhooks — direto de uma conversa com Claude ou Cursor.
+
+<Info>
+  O Parcele+ usa OAuth2 client credentials (`ClientId` + `ClientSecret`), não uma chave de API única — o servidor cuida de gerar e renovar o token de acesso real por trás dos panos, usando o SDK oficial `Twila.ParceleMais`.
+</Info>
+
+---
+
+## Pré-requisitos
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/download) ou superior
+- `ClientId`/`ClientSecret` do Parcele+ — peça ao time de integração
+
+---
+
+## Instalação local
+
+```bash
+git clone https://github.com/Twila-Digital/twila-parcelemais-mcp.git
+cd twila-parcelemais-mcp
+dotnet build
+```
+
+---
+
+## Configuração
+
+<Tabs>
+  <Tab title="Claude Desktop">
+    Abra o arquivo de configuração do Claude Desktop (`claude_desktop_config.json`) e adicione:
+
+    ```json
+    {
+      "mcpServers": {
+        "parcelemais": {
+          "command": "dotnet",
+          "args": ["run", "--project", "/caminho/absoluto/para/twila-parcelemais-mcp/src/Parcelemais.Mcp.Stdio"],
+          "env": {
+            "PARCELEMAIS_CLIENT_ID": "seu-client-id",
+            "PARCELEMAIS_CLIENT_SECRET": "seu-client-secret",
+            "PARCELEMAIS_ENVIRONMENT": "Staging"
+          }
+        }
+      }
+    }
+    ```
+
+    <Warning>
+      Use o **caminho absoluto** para a pasta `Parcelemais.Mcp.Stdio`. Caminhos relativos causam falha na inicialização.
+    </Warning>
+  </Tab>
+
+  <Tab title="Cursor">
+    Em `mcp.servers` nas configurações do Cursor, adicione a mesma estrutura:
+
+    ```json
+    {
+      "mcp.servers": {
+        "parcelemais": {
+          "command": "dotnet",
+          "args": ["run", "--project", "/caminho/absoluto/para/twila-parcelemais-mcp/src/Parcelemais.Mcp.Stdio"],
+          "env": {
+            "PARCELEMAIS_CLIENT_ID": "seu-client-id",
+            "PARCELEMAIS_CLIENT_SECRET": "seu-client-secret",
+            "PARCELEMAIS_ENVIRONMENT": "Staging"
+          }
+        }
+      }
+    }
+    ```
+  </Tab>
+
+  <Tab title="HTTP remoto">
+    Pro conector remoto do Claude.ai (ou qualquer cliente MCP que fale HTTP), conecte via OAuth 2.0 — o servidor implementa Dynamic Client Registration + Authorization Code + PKCE. Na tela de autorização, você informa `ClientId`, `ClientSecret` e o ambiente (staging/produção) do Parcele+; o servidor valida contra a API real antes de emitir o token.
+
+    ```json
+    {
+      "mcpServers": {
+        "parcelemais": {
+          "url": "https://<seu-deploy>/mcp",
+          "headers": {
+            "Authorization": "Bearer TOKEN_OBTIDO_VIA_OAUTH"
+          }
+        }
+      }
+    }
+    ```
+
+    Também é aceito o header `X-API-Key` como alternativa ao `Authorization`. Veja o [README do repositório](https://github.com/Twila-Digital/twila-parcelemais-mcp#conectar-via-oauth-claudeai--remoto) para o fluxo OAuth completo.
+  </Tab>
+</Tabs>
+
+---
+
+## Ferramentas disponíveis
+
+| Recurso | Ferramentas |
+|---|---|
+| Pedidos | `createOrder`, `getOrder`, `listOrders`, `startCdcSale`, `importOrderInvoice` |
+| Simulações | `simulateInstallments`, `simulateValues` |
+| Clientes | `getCustomer`, `listCustomers` |
+| Webhooks | `createWebhook`, `listWebhooks`, `updateWebhook`, `deleteWebhook` |
+
+---
+
+## Solução de problemas
+
+<AccordionGroup>
+  <Accordion title="Erro de credencial">
+    Verifique se `PARCELEMAIS_CLIENT_ID`/`PARCELEMAIS_CLIENT_SECRET` estão definidas no bloco `env` da config (local) ou se o token OAuth foi obtido corretamente (remoto). Confirme também que o ambiente (staging/produção) das credenciais corresponde ao configurado.
+  </Accordion>
+
+  <Accordion title="Servidor não conecta">
+    Confirme que o caminho para a pasta `Parcelemais.Mcp.Stdio` é absoluto e que o .NET 8 SDK está instalado (`dotnet --version`). Após alterar a configuração, reinicie o Claude Desktop ou o Cursor.
+  </Accordion>
+
+  <Accordion title="Claude.ai não conecta (remoto)">
+    O conector remoto do Claude.ai exige o fluxo OAuth completo (`/authorize`) — não funciona apenas com um header estático nesse cliente específico.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+<Card title="Repositório" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-mcp">
+  Código-fonte, changelog e guia de contribuição no GitHub.
+</Card>
