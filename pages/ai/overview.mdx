@@ -29,22 +29,26 @@ description: 'Ferramentas e contexto especializado para integrar o Parcele+ com 
 
 ## O que está disponível
 
-<Card title="Skills" icon="book-open" href="/pages/ai/skills" horizontal>
-  Pacotes de contexto especializado que ensinam agentes de IA a integrar corretamente com o Parcele+ — regras de negócio, padrões técnicos e exemplos prontos nas 6 linguagens dos SDKs oficiais.
-</Card>
+<CardGroup cols={2}>
+  <Card title="MCP Server" icon="plug" href="/pages/ai/mcp">
+    Exponha a API do Parcele+ como ferramentas nativas para Claude Desktop, Cursor e qualquer cliente MCP. Crie pedidos, simule parcelas e gerencie webhooks direto de uma conversa.
+  </Card>
+
+  <Card title="Skills" icon="book-open" href="/pages/ai/skills">
+    Pacotes de contexto especializado que ensinam agentes de IA a integrar corretamente com o Parcele+ — regras de negócio, padrões técnicos e exemplos prontos nas 6 linguagens dos SDKs oficiais.
+  </Card>
+</CardGroup>
 
 ---
 
-## Quando usar
+## Para quem é cada ferramenta
 
-As Skills servem pra dois momentos diferentes:
-
-| | Integration Mode | Agent Mode |
+| | MCP Server | Skills |
 |---|---|---|
-| **Objetivo** | Gerar código de integração correto | Executar ações direto na API via `curl` |
-| **Ideal para** | IDEs com AI coding (Cursor, Claude Code) escrevendo um SDK | Automações, assistentes, agentes operando a API sem escrever código |
-| **Formato** | Arquivos de contexto lidos pelo editor (`rules/`, `examples/`) | `rules/agent.md` / `SKILL-AGENT.md` |
-| **Requer credenciais** | Não (só pra rodar o código gerado) | Sim (`ClientId`/`ClientSecret`) |
+| **Objetivo** | Executar ações na API via IA | Fornecer contexto pra IA gerar código correto |
+| **Ideal para** | Automações, assistentes, agentes | IDEs com AI coding (Cursor, Claude Code) |
+| **Formato** | Ferramentas MCP chamadas em runtime | Arquivos de contexto lidos pelo editor |
+| **Requer credenciais** | Sim (`ClientId`/`ClientSecret`) | Não (só pra rodar o código gerado) |
 
 ---
 
@@ -57,7 +61,7 @@ As Skills servem pra dois momentos diferentes:
   <Card title="SDKs Oficiais" icon="boxes-stacked" href="/pages/sdks/sdks">
     .NET, Java, Node.js, Python, PHP e Go.
   </Card>
-  <Card title="Skills no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-skills">
-    Código-fonte das regras, exemplos e ferramentas.
+  <Card title="MCP Server no GitHub" icon="github" href="https://github.com/Twila-Digital/twila-parcelemais-mcp">
+    Código-fonte do servidor MCP.
   </Card>
 </CardGroup>

@@ -141,7 +141,7 @@
         "groups": [
           {
             "group": "IA",
-            "pages": ["pages/ai/overview", "pages/ai/skills"]
+            "pages": ["pages/ai/overview", "pages/ai/mcp", "pages/ai/skills"]
           }
         ]
       }
